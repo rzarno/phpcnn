@@ -1,0 +1,76 @@
+{
+    "sequence": [
+        {
+            "photo": "./sequences/sequence_16/2022-12-04 14_17_43.622497.jpg",
+            "action": "forward"
+        },
+        {
+            "photo": "./sequences/sequence_16/2022-12-04 14_17_45.778268.jpg",
+            "action": "forward"
+        },
+        {
+            "photo": "./sequences/sequence_16/2022-12-04 14_17_48.014769.jpg",
+            "action": "right"
+        },
+        {
+            "photo": "./sequences/sequence_16/2022-12-04 14_17_49.581397.jpg",
+            "action": "right"
+        },
+        {
+            "photo": "./sequences/sequence_16/2022-12-04 14_17_51.262491.jpg",
+            "action": "forward"
+        },
+        {
+            "photo": "./sequences/sequence_16/2022-12-04 14_17_53.218655.jpg",
+            "action": "forward"
+        },
+        {
+            "photo": "./sequences/sequence_16/2022-12-04 14_17_56.431071.jpg",
+            "action": "left"
+        },
+        {
+            "photo": "./sequences/sequence_16/2022-12-04 14_17_57.986546.jpg",
+            "action": "forward"
+        },
+        {
+            "photo": "./sequences/sequence_16/2022-12-04 14_18_00.262794.jpg",
+            "action": "left"
+        },
+        {
+            "photo": "./sequences/sequence_16/2022-12-04 14_18_02.154957.jpg",
+            "action": "forward"
+        },
+        {
+            "photo": "./sequences/sequence_16/2022-12-04 14_18_04.410827.jpg",
+            "action": "left"
+        },
+        {
+            "photo": "./sequences/sequence_16/2022-12-04 14_18_05.944024.jpg",
+            "action": "forward"
+        },
+        {
+            "photo": "./sequences/sequence_16/2022-12-04 14_18_08.039329.jpg",
+            "action": "right"
+        },
+        {
+            "photo": "./sequences/sequence_16/2022-12-04 14_18_09.811181.jpg",
+            "action": "forward"
+        },
+        {
+            "photo": "./sequences/sequence_16/2022-12-04 14_18_12.153541.jpg",
+            "action": "left"
+        },
+        {
+            "photo": "./sequences/sequence_16/2022-12-04 14_18_13.603211.jpg",
+            "action": "forward"
+        },
+        {
+            "photo": "./sequences/sequence_16/2022-12-04 14_18_15.543972.jpg",
+            "action": "forward"
+        },
+        {
+            "photo": "./sequences/sequence_16/2022-12-04 14_18_17.675654.jpg",
+            "action": "forward"
+        }
+    ]
+}

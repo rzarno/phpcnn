@@ -1,0 +1,210 @@
+<?php
+require __DIR__.'/../vendor/autoload.php';
+
+use Rindow\Math\Matrix\MatrixOperator;
+use Rindow\Math\Matrix\NDArrayPhp;
+use Rindow\Math\Plot\Plot;
+use Rindow\NeuralNetworks\Builder\NeuralNetworks;
+use Interop\Polite\Math\Matrix\NDArray;
+
+$mo = new MatrixOperator();
+$nn = new NeuralNetworks($mo);
+$plt = new Plot(null,$mo);
+
+$epochs = 10;
+$batch_size = 64;
+$version = '1.0';
+
+
+if(isset($argv[1])&&$argv[1]) {
+    $dataset=$argv[1];
+}
+if(isset($argv[2])&&$argv[2]) {
+    $epochs = $argv[3];
+}
+
+$sequenceImg = [];
+$sequenceLabel = [];
+$parentPath = '../image/sequence';
+foreach (new DirectoryIterator($parentPath) as $fileInfo) {
+    if (!$fileInfo->isDir()) {
+        continue;
+    }
+
+    foreach (new DirectoryIterator($parentPath . '/' . $fileInfo->getFilename()) as $file) {
+        if ($file->isDot()) {
+            continue;
+        }
+        if (strpos($file->getFilename(), 'sequence') !== false) {
+            if (!$currentSequence = json_decode(file_get_contents($file->getPathname()), true)) {
+                continue;
+            }
+            $currentProcessedImg = [];
+            $currentProcessedLabel = [];
+            foreach ($currentSequence['sequence'] as $step) {
+                $action = null;
+                switch ($step['action']) {
+                    case 'forward':
+                        $action = 1;
+                        break;
+                    case 'left':
+                        $action = 2;
+                        break;
+                    case 'right':
+                        $action = 3;
+                        break;
+                }
+                if (!$action) {
+                    continue;
+                }
+                $photoPath = str_replace('./sequences', '../image/sequence', $step['photo']);
+                /* Create new object */
+                $im = new \Imagick($photoPath);
+                /* Export the image pixels */
+                $im->resizeImage(102, 60, imagick::FILTER_GAUSSIAN, 1);
+                $im->gaussianBlurImage(1, 1);
+                $im->cropImage(102, 40, 0, 20);
+//                $im->setColorspace(imagick::COLORSPACE_YUV);
+                if (count($currentProcessedImg) === 12) {
+                    $im->writeImage('sample.png');
+                }
+                $pixels = $im->exportImagePixels(0, 0, $im->getImageWidth(), $im->getImageHeight(), "I", \Imagick::PIXEL_CHAR);
+
+                $currentProcessedImg[] = $pixels;
+                $currentProcessedLabel[] = $action;
+            }
+            $sequenceImg = array_merge($sequenceImg, $currentProcessedImg);
+            $sequenceLabel = array_merge($sequenceLabel, $currentProcessedLabel);
+        }
+    }
+}
+$trainImg = array_slice($sequenceImg, 0, 160);
+$testImg = array_slice($sequenceImg, 161);
+
+$trainLabel = array_slice($sequenceLabel, 0, 160);
+$testLabel = array_slice($sequenceLabel, 161);
+
+
+$train_img = new NDArrayPhp($trainImg, NDArray::int16, [160,1,102,40]);
+$train_label = new NDArrayPhp($trainLabel, NDArray::int8, [160]);
+$test_img = new NDArrayPhp($testImg, NDArray::int16, [40,1,102,40]);
+$test_label = new NDArrayPhp($testLabel, NDArray::int8, [40]);
+$inputShape = [102,40,1];
+$class_names = [1, 2, 3];
+
+echo "dataset={$dataset}\n";
+echo "train=[".implode(',',$train_img->shape())."]\n";
+echo "test=[".implode(',',$test_img->shape())."]\n";
+echo "batch_size={$batch_size}\n";
+
+// flatten image and normalize
+function formatingImage($mo,$train_img,$inputShape) {
+    $dataSize = $train_img->shape()[0];
+    $train_img = $train_img->reshape(array_merge([$dataSize],$inputShape));
+    return $mo->scale(1.0/255.0,$mo->astype($train_img,NDArray::float32));
+}
+
+
+echo "formating train image ...\n";
+$train_img = formatingImage($mo,$train_img,$inputShape);
+$train_label = $mo->la()->astype($train_label,NDArray::int32);
+echo "formating test image ...\n";
+$test_img  = formatingImage($mo,$test_img,$inputShape);
+$test_label = $mo->la()->astype($test_label,NDArray::int32);
+
+$modelFilePath = __DIR__."/image-classification-with-cnn-{$version}.model";
+
+if(file_exists($modelFilePath)) {
+    echo "loading model ...\n";
+    $model = $nn->models()->loadModel($modelFilePath);
+    $model->summary();
+} else {
+    echo "creating model ...\n";
+    $model = $nn->models()->Sequential([
+        $nn->layers()->Conv2D(
+            $filters=64,
+            $kernel_size=3,
+            input_shape:$inputShape,
+            kernel_initializer:'he_normal'),
+        $nn->layers()->BatchNormalization(),
+        $nn->layers()->Activation('relu'),
+        $nn->layers()->Conv2D(
+            $filters=64,
+            $kernel_size=3,
+            kernel_initializer:'he_normal'),
+        $nn->layers()->MaxPooling2D(),
+        $nn->layers()->Conv2D(
+            $filters=128,
+            $kernel_size=3,
+            kernel_initializer:'he_normal'),
+        $nn->layers()->BatchNormalization(),
+        $nn->layers()->Activation('relu'),
+        $nn->layers()->Conv2D(
+            $filters=128,
+            $kernel_size=3,
+            kernel_initializer:'he_normal'),
+        $nn->layers()->MaxPooling2D(),
+        $nn->layers()->Conv2D(
+            $filters=256,
+            $kernel_size=3,
+            kernel_initializer:'he_normal',
+            activation:'relu'),
+        $nn->layers()->GlobalAveragePooling2D(),
+        $nn->layers()->Dense($units=512,
+            kernel_initializer:'he_normal'),
+        $nn->layers()->BatchNormalization(),
+        $nn->layers()->Activation('relu'),
+        $nn->layers()->Dense($units=10,
+            activation:'softmax'),
+    ]);
+
+    $model->compile(
+        loss:'sparse_categorical_crossentropy',
+        optimizer:'adam',
+    );
+    $model->summary();
+    echo "training model ...\n";
+    $train_dataset = $nn->data->ImageDataGenerator($train_img,
+        tests:$train_label,
+        batch_size:$batch_size,
+        shuffle:true,
+        height_shift:2,
+        width_shift:2,
+        vertical_flip:true,
+        horizontal_flip:true
+    );
+    $history = $model->fit($train_dataset,null,
+        epochs:$epochs,
+            validation_data:[$test_img,$test_label]);
+    $model->save($modelFilePath,$portable=true);
+    $plt->plot($mo->array($history['accuracy']),null,null,'accuracy');
+    $plt->plot($mo->array($history['val_accuracy']),null,null,'val_accuracy');
+    $plt->plot($mo->array($history['loss']),null,null,'loss');
+    $plt->plot($mo->array($history['val_loss']),null,null,'val_loss');
+    $plt->legend();
+    $plt->title($dataset);
+}
+
+$images = $test_img[[0,7]];
+$labels = $test_label[[0,7]];
+$predicts = $model->predict($images);
+
+var_dump($predicts->toArray());
+var_dump($labels->toArray());
+
+if($inputShape[2]==1) {
+    array_pop($inputShape);
+}
+$plt->setConfig([
+    'frame.xTickLength'=>0,'title.position'=>'down','title.margin'=>0,]);
+[$fig,$axes] = $plt->subplots(4,4);
+foreach ($predicts as $i => $predict) {
+    $axes[$i*2]->imshow($images[$i]->reshape($inputShape),
+        null,null,null,$origin='upper');
+    $axes[$i*2]->setFrame(false);
+    $label = $labels[$i];
+    $axes[$i*2]->setTitle($class_names[$label]."($label)");
+    $axes[$i*2+1]->bar($mo->arange(10),$predict);
+}
+
+$plt->show();

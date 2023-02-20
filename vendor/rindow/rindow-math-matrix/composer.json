@@ -1,0 +1,22 @@
+{
+    "name": "rindow/rindow-math-matrix",
+    "type": "library",
+    "description": "The fundamental package for scientific matrix operation",
+    "keywords": ["rindow","math","matrix","N-dimension","operation"],
+    "license": "BSD-3-Clause",
+    "require": {
+        "php": "^8.0|^8.1|^8.2",
+        "interop-phpobjects/polite-math": "~1.0.4"
+    },
+    "suggest": {
+        "ext-rindow_openblas": "0.3.0 strongly recommended for speed",
+        "ext-rindow_opencl": "0.1.4 GPU/OpenCL support",
+        "ext-rindow_clblast": "0.1.2 BLAS on GPU/OpenCL support",
+        "rindow/math-plot": "for OpenCL tunning"
+    },
+    "autoload": {
+        "psr-4": {
+            "Rindow\\Math\\Matrix\\": "src/"
+        }
+    }
+}
