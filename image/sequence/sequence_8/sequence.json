@@ -1,10 +1,6 @@
 {
     "sequence": [
         {
-            "photo": "./sequences/sequence_8/2022-11-29 11_48_03.289665.jpg",
-            "action": "forward"
-        },
-        {
             "photo": "./sequences/sequence_8/2022-11-29 11_48_05.923157.jpg",
             "action": "forward"
         },
@@ -59,10 +55,6 @@
         {
             "photo": "./sequences/sequence_8/2022-11-29 11_48_35.969345.jpg",
             "action": "forward"
-        },
-        {
-            "photo": "./sequences/sequence_8/2022-11-29 11_48_38.676820.jpg",
-            "action": "left"
         }
     ]
 }

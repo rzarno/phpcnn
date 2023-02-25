@@ -1,10 +1,6 @@
 {
     "sequence": [
         {
-            "photo": "./sequences/sequence_1/2022-11-29 09_26_27.613610.jpg",
-            "action": "forward"
-        },
-        {
             "photo": "./sequences/sequence_1/2022-11-29 09_26_31.452097.jpg",
             "action": "forward"
         },
@@ -46,14 +42,6 @@
         },
         {
             "photo": "./sequences/sequence_1/2022-11-29 09_27_03.550553.jpg",
-            "action": "forward"
-        },
-        {
-            "photo": "./sequences/sequence_1/2022-11-29 09_27_06.100579.jpg",
-            "action": "left"
-        },
-        {
-            "photo": "./sequences/sequence_1/2022-11-29 09_27_08.481608.jpg",
             "action": "forward"
         }
     ]

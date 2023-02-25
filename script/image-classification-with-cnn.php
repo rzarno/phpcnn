@@ -26,7 +26,7 @@ if(isset($argv[2])&&$argv[2]) {
 $sequenceImg = [];
 $sequenceLabel = [];
 $parentPath = '../image/sequence';
-foreach (new DirectoryIterator($parentPath) as $fileInfo) {
+foreach (new DirectoryIterator($parentPath) as $j => $fileInfo) {
     if (!$fileInfo->isDir()) {
         continue;
     }
@@ -61,35 +61,81 @@ foreach (new DirectoryIterator($parentPath) as $fileInfo) {
                 /* Create new object */
                 $im = new \Imagick($photoPath);
                 /* Export the image pixels */
-                $im->resizeImage(102, 60, imagick::FILTER_GAUSSIAN, 1);
-                $im->gaussianBlurImage(1, 1);
-                $im->cropImage(102, 40, 0, 20);
-//                $im->setColorspace(imagick::COLORSPACE_YUV);
+                $im->resizeImage(102, 80, imagick::FILTER_GAUSSIAN, 1);
+                $im->cropImage(102, 40, 0, 40);
+                $im->setColorspace(imagick::COLORSPACE_YUV);
                 if (count($currentProcessedImg) === 12) {
-                    $im->writeImage('sample.png');
+//                    $im->writeImage('sample.png');
                 }
-                $pixels = $im->exportImagePixels(0, 0, $im->getImageWidth(), $im->getImageHeight(), "I", \Imagick::PIXEL_CHAR);
 
+                $pixels = [
+                    $im->exportImagePixels(0, 0, $im->getImageWidth(), $im->getImageHeight(), "R", \Imagick::PIXEL_CHAR),
+                    $im->exportImagePixels(0, 0, $im->getImageWidth(), $im->getImageHeight(), "G", \Imagick::PIXEL_CHAR),
+                    $im->exportImagePixels(0, 0, $im->getImageWidth(), $im->getImageHeight(), "B", \Imagick::PIXEL_CHAR),
+                ];
                 $currentProcessedImg[] = $pixels;
                 $currentProcessedLabel[] = $action;
+                for ($i = 0; $i < 31; $i++) {
+                    $imNew = modify($im);
+                    $pixels = [
+                        $imNew->exportImagePixels(0, 0, $imNew->getImageWidth(), $imNew->getImageHeight(), "R", \Imagick::PIXEL_CHAR),
+                        $imNew->exportImagePixels(0, 0, $imNew->getImageWidth(), $imNew->getImageHeight(), "G", \Imagick::PIXEL_CHAR),
+                        $imNew->exportImagePixels(0, 0, $imNew->getImageWidth(), $imNew->getImageHeight(), "B", \Imagick::PIXEL_CHAR),
+                    ];
+                    $currentProcessedImg[] = $pixels;
+                    $currentProcessedLabel[] = $action;
+//                    $imNew->writeImage("sample$i$j.png");
+                }
             }
             $sequenceImg = array_merge($sequenceImg, $currentProcessedImg);
             $sequenceLabel = array_merge($sequenceLabel, $currentProcessedLabel);
         }
     }
 }
-$trainImg = array_slice($sequenceImg, 0, 160);
-$testImg = array_slice($sequenceImg, 161);
+$result = [];
+foreach ($sequenceImg as $key => $val) {
+    $result[$key] = [$val, $sequenceLabel[$key]];
+}
 
-$trainLabel = array_slice($sequenceLabel, 0, 160);
-$testLabel = array_slice($sequenceLabel, 161);
+shuffle($result);
+
+$sequenceLabel = [];
+$sequenceImg = [];
+foreach ($result as $key => $val) {
+    $sequenceImg[] = $val[0];
+    $sequenceLabel[] = $val[1];
+}
+
+function modify(Imagick $im) {
+    $im = clone $im;
+    if (rand(1,2) == 2) {
+        $im->brightnessContrastImage(10, 10);
+    } else {
+        $im->brightnessContrastImage(5, 20);
+    }
+//    if (rand(1,2) == 2) {
+//        $im->cropImage(97, 30, 5, 10);
+//        $im->scaleImage(102, 30);
+//    }
+    if (rand(1,2) == 2) {
+        $im->flopImage();
+    }
+    return $im;
+}
 
 
-$train_img = new NDArrayPhp($trainImg, NDArray::int16, [160,1,102,40]);
-$train_label = new NDArrayPhp($trainLabel, NDArray::int8, [160]);
-$test_img = new NDArrayPhp($testImg, NDArray::int16, [40,1,102,40]);
-$test_label = new NDArrayPhp($testLabel, NDArray::int8, [40]);
-$inputShape = [102,40,1];
+$trainImg = array_slice($sequenceImg, 0, 4500);
+$testImg = array_slice($sequenceImg, 4500);
+
+$trainLabel = array_slice($sequenceLabel, 0, 4500);
+$testLabel = array_slice($sequenceLabel, 4500);
+
+
+$train_img = new NDArrayPhp($trainImg, NDArray::int16, [4500,3,102,40]);
+$train_label = new NDArrayPhp($trainLabel, NDArray::int8, [4500]);
+$test_img = new NDArrayPhp($testImg, NDArray::int16, [1004,3,102,40]);
+$test_label = new NDArrayPhp($testLabel, NDArray::int8, [1004]);
+$inputShape = [102,40,3];
 $class_names = [1, 2, 3];
 
 echo "dataset={$dataset}\n";
@@ -185,12 +231,23 @@ if(file_exists($modelFilePath)) {
     $plt->title($dataset);
 }
 
-$images = $test_img[[0,7]];
-$labels = $test_label[[0,7]];
+$images = $test_img[[0,100]];
+$labels = $test_label[[0,100]];
 $predicts = $model->predict($images);
-
-var_dump($predicts->toArray());
+$max = [];
+foreach ($predicts as $single) {
+    $max[] = array_keys($single->toArray(), max($single->toArray()))[0];
+}
+$result = 0;
+$labelsArr = $labels->toArray();
+foreach ($max as $key => $value) {
+    if ($value === $labelsArr[$key]) {
+        $result++;
+    }
+}
+var_dump($max);
 var_dump($labels->toArray());
+var_dump($result);
 
 if($inputShape[2]==1) {
     array_pop($inputShape);

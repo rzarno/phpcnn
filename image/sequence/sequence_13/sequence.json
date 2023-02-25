@@ -71,18 +71,6 @@
         {
             "photo": "./sequences/sequence_13/2022-12-04 14_13_50.413059.jpg",
             "action": "forward"
-        },
-        {
-            "photo": "./sequences/sequence_13/2022-12-04 14_13_52.456794.jpg",
-            "action": "left"
-        },
-        {
-            "photo": "./sequences/sequence_13/2022-12-04 14_13_53.965472.jpg",
-            "action": "forward"
-        },
-        {
-            "photo": "./sequences/sequence_13/2022-12-04 14_13_56.224772.jpg",
-            "action": "forward"
         }
     ]
 }

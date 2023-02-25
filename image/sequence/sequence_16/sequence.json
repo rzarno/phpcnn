@@ -63,14 +63,6 @@
         {
             "photo": "./sequences/sequence_16/2022-12-04 14_18_13.603211.jpg",
             "action": "forward"
-        },
-        {
-            "photo": "./sequences/sequence_16/2022-12-04 14_18_15.543972.jpg",
-            "action": "forward"
-        },
-        {
-            "photo": "./sequences/sequence_16/2022-12-04 14_18_17.675654.jpg",
-            "action": "forward"
         }
     ]
 }
