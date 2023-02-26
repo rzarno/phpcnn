@@ -56,7 +56,7 @@ if(file_exists($modelFilePath)) {
     $model->summary();
 } else {
     echo "creating model ...\n";
-    $model = rinbowCNN($nn, $inputShape);
+//    $model = rinbowCNN($nn, $inputShape);
     $model = nvidiaCNN($nn, $inputShape);
     echo "training model ...\n";
     trainModel($nn, $mo, $model, $plt, $train_img, $train_label, $test_img, $test_label, $batch_size, $epochs, $modelFilePath);
@@ -267,7 +267,7 @@ function nvidiaCNN(NeuralNetworks $nn, $inputShape): Sequential
             $strides=2,
             input_shape:$inputShape,
             kernel_initializer:'he_normal',
-            activation:'elu'),
+            activation:'relu'),
         $nn->layers()->BatchNormalization(), //?
         $nn->layers()->Conv2D(
             $filters=36,
@@ -280,26 +280,26 @@ function nvidiaCNN(NeuralNetworks $nn, $inputShape): Sequential
             $kernel_size=5,
             $strides=2,
             kernel_initializer:'he_normal',
-            activation:'elu'),
+            activation:'relu'),
         $nn->layers()->BatchNormalization(), //?
         $nn->layers()->Conv2D(
             $filters=64,
             $kernel_size=3,
             $strides=2,
             kernel_initializer:'he_normal',
-            activation:'elu'),
+            activation:'relu'),
         $nn->layers()->MaxPooling2D(), //?
         $nn->layers()->Dropout(0.2),
         $nn->layers()->Conv2D(
             $filters=64,
             $kernel_size=3,
             kernel_initializer:'he_normal',
-            activation:'elu'),
+            activation:'relu'),
         $nn->layers()->Flatten(),
         $nn->layers()->Dropout(0.2),
-        $nn->layers()->Dense($units=100, activation:'elu'),
-        $nn->layers()->Dense($units=50, activation:'elu'),
-        $nn->layers()->Dense($units=10, activation:'elu'),
+        $nn->layers()->Dense($units=100, activation:'relu'),
+        $nn->layers()->Dense($units=50, activation:'relu'),
+        $nn->layers()->Dense($units=10, activation:'relu'),
         $nn->layers()->Dense($units=1),
     ]);
 
