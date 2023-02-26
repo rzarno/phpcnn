@@ -56,8 +56,8 @@ if(file_exists($modelFilePath)) {
     $model->summary();
 } else {
     echo "creating model ...\n";
-//    $model = rinbowCNN($nn, $inputShape);
-    $model = nvidiaCNN($nn, $inputShape);
+    $model = rinbowCNN($nn, $inputShape);
+//    $model = nvidiaCNN($nn, $inputShape);
     echo "training model ...\n";
     trainModel($nn, $mo, $model, $plt, $train_img, $train_label, $test_img, $test_label, $batch_size, $epochs, $modelFilePath);
 }
