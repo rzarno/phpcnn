@@ -1,0 +1,120 @@
+{
+    "sequence": [
+        {
+            "photo": "./sequences/sequence_21/2023-02-25 22:09:44.435452.jpg",
+            "action": "forward"
+        },
+        {
+            "photo": "./sequences/sequence_21/2023-02-25 22:09:45.603780.jpg",
+            "action": "forward"
+        },
+        {
+            "photo": "./sequences/sequence_21/2023-02-25 22:09:46.924101.jpg",
+            "action": "forward"
+        },
+        {
+            "photo": "./sequences/sequence_21/2023-02-25 22:09:48.196356.jpg",
+            "action": "forward"
+        },
+        {
+            "photo": "./sequences/sequence_21/2023-02-25 22:09:50.147961.jpg",
+            "action": "right"
+        },
+        {
+            "photo": "./sequences/sequence_21/2023-02-25 22:09:51.460101.jpg",
+            "action": "right"
+        },
+        {
+            "photo": "./sequences/sequence_21/2023-02-25 22:09:52.604487.jpg",
+            "action": "forward"
+        },
+        {
+            "photo": "./sequences/sequence_21/2023-02-25 22:09:53.916655.jpg",
+            "action": "right"
+        },
+        {
+            "photo": "./sequences/sequence_21/2023-02-25 22:09:55.061055.jpg",
+            "action": "forward"
+        },
+        {
+            "photo": "./sequences/sequence_21/2023-02-25 22:09:56.246070.jpg",
+            "action": "left"
+        },
+        {
+            "photo": "./sequences/sequence_21/2023-02-25 22:09:57.493894.jpg",
+            "action": "left"
+        },
+        {
+            "photo": "./sequences/sequence_21/2023-02-25 22:09:58.670165.jpg",
+            "action": "left"
+        },
+        {
+            "photo": "./sequences/sequence_21/2023-02-25 22:09:59.637692.jpg",
+            "action": "forward"
+        },
+        {
+            "photo": "./sequences/sequence_21/2023-02-25 22:10:00.973475.jpg",
+            "action": "left"
+        },
+        {
+            "photo": "./sequences/sequence_21/2023-02-25 22:10:02.557922.jpg",
+            "action": "left"
+        },
+        {
+            "photo": "./sequences/sequence_21/2023-02-25 22:10:05.183123.jpg",
+            "action": "forward"
+        },
+        {
+            "photo": "./sequences/sequence_21/2023-02-25 22:10:06.574149.jpg",
+            "action": "left"
+        },
+        {
+            "photo": "./sequences/sequence_21/2023-02-25 22:10:07.679146.jpg",
+            "action": "forward"
+        },
+        {
+            "photo": "./sequences/sequence_21/2023-02-25 22:10:08.894759.jpg",
+            "action": "forward"
+        },
+        {
+            "photo": "./sequences/sequence_21/2023-02-25 22:10:09.982737.jpg",
+            "action": "forward"
+        },
+        {
+            "photo": "./sequences/sequence_21/2023-02-25 22:10:11.734954.jpg",
+            "action": "left"
+        },
+        {
+            "photo": "./sequences/sequence_21/2023-02-25 22:10:12.887231.jpg",
+            "action": "left"
+        },
+        {
+            "photo": "./sequences/sequence_21/2023-02-25 22:10:14.183646.jpg",
+            "action": "left"
+        },
+        {
+            "photo": "./sequences/sequence_21/2023-02-25 22:10:15.431614.jpg",
+            "action": "forward"
+        },
+        {
+            "photo": "./sequences/sequence_21/2023-02-25 22:10:16.791819.jpg",
+            "action": "forward"
+        },
+        {
+            "photo": "./sequences/sequence_21/2023-02-25 22:10:18.631892.jpg",
+            "action": "right"
+        },
+        {
+            "photo": "./sequences/sequence_21/2023-02-25 22:10:19.920546.jpg",
+            "action": "right"
+        },
+        {
+            "photo": "./sequences/sequence_21/2023-02-25 22:10:21.056500.jpg",
+            "action": "forward"
+        },
+        {
+            "photo": "./sequences/sequence_21/2023-02-25 22:10:22.464781.jpg",
+            "action": "forward"
+        }
+    ]
+}

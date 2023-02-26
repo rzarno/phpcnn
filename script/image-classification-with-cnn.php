@@ -6,6 +6,7 @@ use Rindow\Math\Matrix\NDArrayPhp;
 use Rindow\Math\Plot\Plot;
 use Rindow\NeuralNetworks\Builder\NeuralNetworks;
 use Interop\Polite\Math\Matrix\NDArray;
+use Rindow\NeuralNetworks\Model\Sequential;
 
 $mo = new MatrixOperator();
 $nn = new NeuralNetworks($mo);
@@ -14,122 +15,13 @@ $plt = new Plot(null,$mo);
 $epochs = 10;
 $batch_size = 64;
 $version = '1.0';
-
-
-if(isset($argv[1])&&$argv[1]) {
-    $dataset=$argv[1];
-}
-if(isset($argv[2])&&$argv[2]) {
-    $epochs = $argv[3];
-}
-
-$sequenceImg = [];
-$sequenceLabel = [];
-$parentPath = '../image/sequence';
-foreach (new DirectoryIterator($parentPath) as $j => $fileInfo) {
-    if (!$fileInfo->isDir()) {
-        continue;
-    }
-
-    foreach (new DirectoryIterator($parentPath . '/' . $fileInfo->getFilename()) as $file) {
-        if ($file->isDot()) {
-            continue;
-        }
-        if (strpos($file->getFilename(), 'sequence') !== false) {
-            if (!$currentSequence = json_decode(file_get_contents($file->getPathname()), true)) {
-                continue;
-            }
-            $currentProcessedImg = [];
-            $currentProcessedLabel = [];
-            foreach ($currentSequence['sequence'] as $step) {
-                $action = null;
-                switch ($step['action']) {
-                    case 'forward':
-                        $action = 1;
-                        break;
-                    case 'left':
-                        $action = 2;
-                        break;
-                    case 'right':
-                        $action = 3;
-                        break;
-                }
-                if (!$action) {
-                    continue;
-                }
-                $photoPath = str_replace('./sequences', '../image/sequence', $step['photo']);
-                /* Create new object */
-                $im = new \Imagick($photoPath);
-                /* Export the image pixels */
-                $im->resizeImage(102, 80, imagick::FILTER_GAUSSIAN, 1);
-                $im->cropImage(102, 40, 0, 40);
-                $im->setColorspace(imagick::COLORSPACE_YUV);
-                if (count($currentProcessedImg) === 12) {
-//                    $im->writeImage('sample.png');
-                }
-
-                $pixels = [
-                    $im->exportImagePixels(0, 0, $im->getImageWidth(), $im->getImageHeight(), "R", \Imagick::PIXEL_CHAR),
-                    $im->exportImagePixels(0, 0, $im->getImageWidth(), $im->getImageHeight(), "G", \Imagick::PIXEL_CHAR),
-                    $im->exportImagePixels(0, 0, $im->getImageWidth(), $im->getImageHeight(), "B", \Imagick::PIXEL_CHAR),
-                ];
-                $currentProcessedImg[] = $pixels;
-                $currentProcessedLabel[] = $action;
-                for ($i = 0; $i < 31; $i++) {
-                    $imNew = modify($im);
-                    $pixels = [
-                        $imNew->exportImagePixels(0, 0, $imNew->getImageWidth(), $imNew->getImageHeight(), "R", \Imagick::PIXEL_CHAR),
-                        $imNew->exportImagePixels(0, 0, $imNew->getImageWidth(), $imNew->getImageHeight(), "G", \Imagick::PIXEL_CHAR),
-                        $imNew->exportImagePixels(0, 0, $imNew->getImageWidth(), $imNew->getImageHeight(), "B", \Imagick::PIXEL_CHAR),
-                    ];
-                    $currentProcessedImg[] = $pixels;
-                    $currentProcessedLabel[] = $action;
-//                    $imNew->writeImage("sample$i$j.png");
-                }
-            }
-            $sequenceImg = array_merge($sequenceImg, $currentProcessedImg);
-            $sequenceLabel = array_merge($sequenceLabel, $currentProcessedLabel);
-        }
-    }
-}
-$result = [];
-foreach ($sequenceImg as $key => $val) {
-    $result[$key] = [$val, $sequenceLabel[$key]];
-}
-
-shuffle($result);
-
-$sequenceLabel = [];
-$sequenceImg = [];
-foreach ($result as $key => $val) {
-    $sequenceImg[] = $val[0];
-    $sequenceLabel[] = $val[1];
-}
-
-function modify(Imagick $im) {
-    $im = clone $im;
-    if (rand(1,2) == 2) {
-        $im->brightnessContrastImage(10, 10);
-    } else {
-        $im->brightnessContrastImage(5, 20);
-    }
-//    if (rand(1,2) == 2) {
-//        $im->cropImage(97, 30, 5, 10);
-//        $im->scaleImage(102, 30);
-//    }
-    if (rand(1,2) == 2) {
-        $im->flopImage();
-    }
-    return $im;
-}
-
+[$sequenceImg, $sequenceLabel] = importData();
 
 $trainImg = array_slice($sequenceImg, 0, 4500);
 $testImg = array_slice($sequenceImg, 4500);
 
 $trainLabel = array_slice($sequenceLabel, 0, 4500);
 $testLabel = array_slice($sequenceLabel, 4500);
-
 
 $train_img = new NDArrayPhp($trainImg, NDArray::int16, [4500,3,102,40]);
 $train_label = new NDArrayPhp($trainLabel, NDArray::int8, [4500]);
@@ -138,7 +30,6 @@ $test_label = new NDArrayPhp($testLabel, NDArray::int8, [1004]);
 $inputShape = [102,40,3];
 $class_names = [1, 2, 3];
 
-echo "dataset={$dataset}\n";
 echo "train=[".implode(',',$train_img->shape())."]\n";
 echo "test=[".implode(',',$test_img->shape())."]\n";
 echo "batch_size={$batch_size}\n";
@@ -149,7 +40,6 @@ function formatingImage($mo,$train_img,$inputShape) {
     $train_img = $train_img->reshape(array_merge([$dataSize],$inputShape));
     return $mo->scale(1.0/255.0,$mo->astype($train_img,NDArray::float32));
 }
-
 
 echo "formating train image ...\n";
 $train_img = formatingImage($mo,$train_img,$inputShape);
@@ -166,6 +56,162 @@ if(file_exists($modelFilePath)) {
     $model->summary();
 } else {
     echo "creating model ...\n";
+    $model = rinbowCNN($nn, $inputShape);
+    $model = nvidiaCNN($nn, $inputShape);
+    echo "training model ...\n";
+    trainModel($nn, $mo, $model, $plt, $train_img, $train_label, $test_img, $test_label, $batch_size, $epochs, $modelFilePath);
+}
+
+$images = $test_img[[0,100]];
+$labels = $test_label[[0,100]];
+$predicts = $model->predict($images);
+$max = [];
+foreach ($predicts as $single) {
+    $max[] = array_keys($single->toArray(), max($single->toArray()))[0];
+}
+$result = 0;
+$labelsArr = $labels->toArray();
+foreach ($max as $key => $value) {
+    if ($value === $labelsArr[$key]) {
+        $result++;
+    }
+}
+var_dump($max);
+var_dump($labels->toArray());
+var_dump($result);
+
+if($inputShape[2]==1) {
+    array_pop($inputShape);
+}
+$plt->setConfig([
+    'frame.xTickLength'=>0,'title.position'=>'down','title.margin'=>0,]);
+[$fig,$axes] = $plt->subplots(4,4);
+foreach ($predicts as $i => $predict) {
+    $axes[$i*2]->imshow($images[$i]->reshape($inputShape),
+        null,null,null,$origin='upper');
+    $axes[$i*2]->setFrame(false);
+    $label = $labels[$i];
+    $axes[$i*2]->setTitle($class_names[$label]."($label)");
+    $axes[$i*2+1]->bar($mo->arange(10),$predict);
+}
+
+$plt->show();
+
+
+function importData()
+{
+    $sequenceImg = [];
+    $sequenceLabel = [];
+    $parentPath = '../image/sequence';
+    foreach (new DirectoryIterator($parentPath) as $j => $fileInfo) {
+        if (!$fileInfo->isDir()) {
+            continue;
+        }
+
+        foreach (new DirectoryIterator($parentPath . '/' . $fileInfo->getFilename()) as $file) {
+            if ($file->isDot()) {
+                continue;
+            }
+            if (strpos($file->getFilename(), 'sequence') !== false) {
+                if (!$currentSequence = json_decode(file_get_contents($file->getPathname()), true)) {
+                    continue;
+                }
+                $currentProcessedImg = [];
+                $currentProcessedLabel = [];
+                foreach ($currentSequence['sequence'] as $step) {
+                    $action = encodeAction($step['action']);
+                    if (!$action) {
+                        continue;
+                    }
+                    $photoPath = str_replace('./sequences', '../image/sequence', $step['photo']);
+                    /* Create new object */
+                    $im = new \Imagick($photoPath);
+                    /* Export the image pixels */
+                    $im->resizeImage(102, 80, imagick::FILTER_GAUSSIAN, 1);
+                    $im->cropImage(102, 40, 0, 40);
+                    $im->setColorspace(imagick::COLORSPACE_YUV);
+                    if (count($currentProcessedImg) === 12) {
+//                    $im->writeImage('sample.png');
+                    }
+
+                    $pixels = exportRGBArray($im);
+                    $currentProcessedImg[] = $pixels;
+                    $currentProcessedLabel[] = $action;
+                    for ($i = 0; $i < 10; $i++) {
+                        $imNew = modifyImageRandomly($im);
+                        $pixels = exportRGBArray($im);
+                        $currentProcessedImg[] = $pixels;
+                        $currentProcessedLabel[] = $action;
+//                    $imNew->writeImage("sample$i$j.png");
+                    }
+                }
+                $sequenceImg = array_merge($sequenceImg, $currentProcessedImg);
+                $sequenceLabel = array_merge($sequenceLabel, $currentProcessedLabel);
+            }
+        }
+    }
+    $result = [];
+    foreach ($sequenceImg as $key => $val) {
+        $result[$key] = [$val, $sequenceLabel[$key]];
+    }
+
+    shuffle($result);
+
+    $sequenceLabel = [];
+    $sequenceImg = [];
+    foreach ($result as $key => $val) {
+        $sequenceImg[] = $val[0];
+        $sequenceLabel[] = $val[1];
+    }
+    return [$sequenceImg, $sequenceLabel];
+}
+
+function exportRGBArray(\Imagick $im)
+{
+    $pixels = [
+        $im->exportImagePixels(0, 0, $im->getImageWidth(), $im->getImageHeight(), "R", \Imagick::PIXEL_CHAR),
+        $im->exportImagePixels(0, 0, $im->getImageWidth(), $im->getImageHeight(), "G", \Imagick::PIXEL_CHAR),
+        $im->exportImagePixels(0, 0, $im->getImageWidth(), $im->getImageHeight(), "B", \Imagick::PIXEL_CHAR),
+    ];
+    return $pixels;
+}
+
+function encodeAction(string $actionBefore)
+{
+    $action = null;
+    switch ($actionBefore) {
+        case 'forward':
+            $action = 1;
+            break;
+        case 'left':
+            $action = 2;
+            break;
+        case 'right':
+            $action = 3;
+            break;
+    }
+    return $action;
+}
+
+function modifyImageRandomly(Imagick $im) {
+    $im = clone $im;
+    if (rand(1,2) == 2) {
+        $im->brightnessContrastImage(10, 10);
+    } else {
+        $im->brightnessContrastImage(5, 20);
+    }
+//    if (rand(1,2) == 2) {
+//        $im->cropImage(97, 30, 5, 10);
+//        $im->scaleImage(102, 30);
+//    }
+    if (rand(1,2) == 2) {
+        $im->flopImage();
+    }
+    return $im;
+}
+
+function rinbowCNN(NeuralNetworks $nn, $inputShape): Sequential
+{
     $model = $nn->models()->Sequential([
         $nn->layers()->Conv2D(
             $filters=64,
@@ -209,7 +255,75 @@ if(file_exists($modelFilePath)) {
         optimizer:'adam',
     );
     $model->summary();
-    echo "training model ...\n";
+    return $model;
+}
+
+function nvidiaCNN(NeuralNetworks $nn, $inputShape): Sequential
+{
+    $model = $nn->models()->Sequential([
+        $nn->layers()->Conv2D(
+            $filters=24,
+            $kernel_size=5,
+            $strides=2,
+            input_shape:$inputShape,
+            kernel_initializer:'he_normal',
+            activation:'elu'),
+        $nn->layers()->BatchNormalization(), //?
+        $nn->layers()->Conv2D(
+            $filters=36,
+            $kernel_size=5,
+            strides: 2,
+            kernel_initializer:'he_normal'),
+        $nn->layers()->MaxPooling2D(), //?
+        $nn->layers()->Conv2D(
+            $filters=48,
+            $kernel_size=5,
+            $strides=2,
+            kernel_initializer:'he_normal',
+            activation:'elu'),
+        $nn->layers()->BatchNormalization(), //?
+        $nn->layers()->Conv2D(
+            $filters=64,
+            $kernel_size=3,
+            $strides=2,
+            kernel_initializer:'he_normal',
+            activation:'elu'),
+        $nn->layers()->MaxPooling2D(), //?
+        $nn->layers()->Dropout(0.2),
+        $nn->layers()->Conv2D(
+            $filters=64,
+            $kernel_size=3,
+            kernel_initializer:'he_normal',
+            activation:'elu'),
+        $nn->layers()->Flatten(),
+        $nn->layers()->Dropout(0.2),
+        $nn->layers()->Dense($units=100, activation:'elu'),
+        $nn->layers()->Dense($units=50, activation:'elu'),
+        $nn->layers()->Dense($units=10, activation:'elu'),
+        $nn->layers()->Dense($units=1),
+    ]);
+
+    $model->compile(
+        loss:'sparse_categorical_crossentropy',
+        optimizer:'adam',
+    );
+    $model->summary();
+    return $model;
+}
+
+function trainModel(
+    NeuralNetworks $nn,
+    MatrixOperator $mo,
+    Sequential $model,
+    Plot $plt,
+   $train_img,
+   $train_label,
+   $test_img,
+   $test_label,
+   $batch_size,
+   $epochs,
+   $modelFilePath
+) {
     $train_dataset = $nn->data->ImageDataGenerator($train_img,
         tests:$train_label,
         batch_size:$batch_size,
@@ -221,47 +335,13 @@ if(file_exists($modelFilePath)) {
     );
     $history = $model->fit($train_dataset,null,
         epochs:$epochs,
-            validation_data:[$test_img,$test_label]);
+        validation_data:[$test_img,$test_label]);
     $model->save($modelFilePath,$portable=true);
     $plt->plot($mo->array($history['accuracy']),null,null,'accuracy');
     $plt->plot($mo->array($history['val_accuracy']),null,null,'val_accuracy');
     $plt->plot($mo->array($history['loss']),null,null,'loss');
     $plt->plot($mo->array($history['val_loss']),null,null,'val_loss');
     $plt->legend();
-    $plt->title($dataset);
+    $plt->title('Lane driving action classification');
 }
 
-$images = $test_img[[0,100]];
-$labels = $test_label[[0,100]];
-$predicts = $model->predict($images);
-$max = [];
-foreach ($predicts as $single) {
-    $max[] = array_keys($single->toArray(), max($single->toArray()))[0];
-}
-$result = 0;
-$labelsArr = $labels->toArray();
-foreach ($max as $key => $value) {
-    if ($value === $labelsArr[$key]) {
-        $result++;
-    }
-}
-var_dump($max);
-var_dump($labels->toArray());
-var_dump($result);
-
-if($inputShape[2]==1) {
-    array_pop($inputShape);
-}
-$plt->setConfig([
-    'frame.xTickLength'=>0,'title.position'=>'down','title.margin'=>0,]);
-[$fig,$axes] = $plt->subplots(4,4);
-foreach ($predicts as $i => $predict) {
-    $axes[$i*2]->imshow($images[$i]->reshape($inputShape),
-        null,null,null,$origin='upper');
-    $axes[$i*2]->setFrame(false);
-    $label = $labels[$i];
-    $axes[$i*2]->setTitle($class_names[$label]."($label)");
-    $axes[$i*2+1]->bar($mo->arange(10),$predict);
-}
-
-$plt->show();

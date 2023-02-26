@@ -1,0 +1,72 @@
+{
+    "sequence": [
+        {
+            "photo": "./sequences/sequence_32/2023-02-25 22:21:03.224079.jpg",
+            "action": "forward"
+        },
+        {
+            "photo": "./sequences/sequence_32/2023-02-25 22:21:05.351601.jpg",
+            "action": "forward"
+        },
+        {
+            "photo": "./sequences/sequence_32/2023-02-25 22:21:06.608256.jpg",
+            "action": "forward"
+        },
+        {
+            "photo": "./sequences/sequence_32/2023-02-25 22:21:07.784778.jpg",
+            "action": "forward"
+        },
+        {
+            "photo": "./sequences/sequence_32/2023-02-25 22:21:08.904229.jpg",
+            "action": "forward"
+        },
+        {
+            "photo": "./sequences/sequence_32/2023-02-25 22:21:10.736942.jpg",
+            "action": "right"
+        },
+        {
+            "photo": "./sequences/sequence_32/2023-02-25 22:21:11.841132.jpg",
+            "action": "right"
+        },
+        {
+            "photo": "./sequences/sequence_32/2023-02-25 22:21:12.928781.jpg",
+            "action": "right"
+        },
+        {
+            "photo": "./sequences/sequence_32/2023-02-25 22:21:14.793050.jpg",
+            "action": "forward"
+        },
+        {
+            "photo": "./sequences/sequence_32/2023-02-25 22:21:16.225362.jpg",
+            "action": "forward"
+        },
+        {
+            "photo": "./sequences/sequence_32/2023-02-25 22:21:18.193703.jpg",
+            "action": "forward"
+        },
+        {
+            "photo": "./sequences/sequence_32/2023-02-25 22:21:19.305851.jpg",
+            "action": "left"
+        },
+        {
+            "photo": "./sequences/sequence_32/2023-02-25 22:21:23.386744.jpg",
+            "action": "left"
+        },
+        {
+            "photo": "./sequences/sequence_32/2023-02-25 22:21:24.730627.jpg",
+            "action": "forward"
+        },
+        {
+            "photo": "./sequences/sequence_32/2023-02-25 22:21:26.018915.jpg",
+            "action": "forward"
+        },
+        {
+            "photo": "./sequences/sequence_32/2023-02-25 22:21:27.979227.jpg",
+            "action": "right"
+        },
+        {
+            "photo": "./sequences/sequence_32/2023-02-25 22:21:28.987315.jpg",
+            "action": "forward"
+        }
+    ]
+}
