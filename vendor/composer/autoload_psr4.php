@@ -9,5 +9,6 @@ return array(
     'Rindow\\NeuralNetworks\\' => array($vendorDir . '/rindow/rindow-neuralnetworks/src'),
     'Rindow\\Math\\Plot\\' => array($vendorDir . '/rindow/rindow-math-plot/src'),
     'Rindow\\Math\\Matrix\\' => array($vendorDir . '/rindow/rindow-math-matrix/src'),
+    'League\\Pipeline\\' => array($vendorDir . '/league/pipeline/src'),
     'Interop\\Polite\\Math\\' => array($vendorDir . '/interop-phpobjects/polite-math/src'),
 );

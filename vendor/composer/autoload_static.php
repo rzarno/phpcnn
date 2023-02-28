@@ -13,6 +13,10 @@ class ComposerStaticInit4be5c5f007df727f39bf45b60545249b
             'Rindow\\Math\\Plot\\' => 17,
             'Rindow\\Math\\Matrix\\' => 19,
         ),
+        'L' => 
+        array (
+            'League\\Pipeline\\' => 16,
+        ),
         'I' => 
         array (
             'Interop\\Polite\\Math\\' => 20,
@@ -32,9 +36,23 @@ class ComposerStaticInit4be5c5f007df727f39bf45b60545249b
         array (
             0 => __DIR__ . '/..' . '/rindow/rindow-math-matrix/src',
         ),
+        'League\\Pipeline\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/league/pipeline/src',
+        ),
         'Interop\\Polite\\Math\\' => 
         array (
             0 => __DIR__ . '/..' . '/interop-phpobjects/polite-math/src',
+        ),
+    );
+
+    public static $prefixesPsr0 = array (
+        's' => 
+        array (
+            'service\\' => 
+            array (
+                0 => __DIR__ . '/../..' . '/',
+            ),
         ),
     );
 
@@ -47,6 +65,7 @@ class ComposerStaticInit4be5c5f007df727f39bf45b60545249b
         return \Closure::bind(function () use ($loader) {
             $loader->prefixLengthsPsr4 = ComposerStaticInit4be5c5f007df727f39bf45b60545249b::$prefixLengthsPsr4;
             $loader->prefixDirsPsr4 = ComposerStaticInit4be5c5f007df727f39bf45b60545249b::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInit4be5c5f007df727f39bf45b60545249b::$prefixesPsr0;
             $loader->classMap = ComposerStaticInit4be5c5f007df727f39bf45b60545249b::$classMap;
 
         }, null, ClassLoader::class);

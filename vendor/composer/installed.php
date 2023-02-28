@@ -1,9 +1,9 @@
 <?php return array(
     'root' => array(
         'name' => '__root__',
-        'pretty_version' => '1.0.0+no-version-set',
-        'version' => '1.0.0.0',
-        'reference' => NULL,
+        'pretty_version' => 'dev-main',
+        'version' => 'dev-main',
+        'reference' => '846f87443f72107cafbd3349a5681e2fa2f3f3b8',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -11,9 +11,9 @@
     ),
     'versions' => array(
         '__root__' => array(
-            'pretty_version' => '1.0.0+no-version-set',
-            'version' => '1.0.0.0',
-            'reference' => NULL,
+            'pretty_version' => 'dev-main',
+            'version' => 'dev-main',
+            'reference' => '846f87443f72107cafbd3349a5681e2fa2f3f3b8',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -25,6 +25,15 @@
             'reference' => 'b2953499bb20df941df0f1d904e1f1d9a7acd3d4',
             'type' => 'library',
             'install_path' => __DIR__ . '/../interop-phpobjects/polite-math',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'league/pipeline' => array(
+            'pretty_version' => '1.0.0',
+            'version' => '1.0.0.0',
+            'reference' => 'aa14b0e3133121f8be39e9a3b6ddd011fc5bb9a8',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../league/pipeline',
             'aliases' => array(),
             'dev_requirement' => false,
         ),

@@ -56,29 +56,64 @@ if(file_exists($modelFilePath)) {
     $model->summary();
 } else {
     echo "creating model ...\n";
-    $model = rinbowCNN($nn, $inputShape);
-//    $model = nvidiaCNN($nn, $inputShape);
+//    $model = rinbowCNN($nn, $inputShape);
+    $model = nvidiaCNNDave2($nn, $inputShape);
     echo "training model ...\n";
     trainModel($nn, $mo, $model, $plt, $train_img, $train_label, $test_img, $test_label, $batch_size, $epochs, $modelFilePath);
 }
 
-$images = $test_img[[0,100]];
-$labels = $test_label[[0,100]];
+$images = $test_img[[200,400]];
+$labels = $test_label[[200,400]];
 $predicts = $model->predict($images);
 $max = [];
 foreach ($predicts as $single) {
     $max[] = array_keys($single->toArray(), max($single->toArray()))[0];
 }
+
+$count = count($max);
+$count1 = 0;
+$count2 = 0;
+$count3 = 0;
 $result = 0;
+$result1 = 0;
+$result2 = 0;
+$result3 = 0;
+$resultDetails = [];
 $labelsArr = $labels->toArray();
 foreach ($max as $key => $value) {
+    $resultDetails[] = ['real'=> $labelsArr[$key], 'pred' => $value];
+    switch($labelsArr[$key]) {
+        case 1:
+            $count1++;
+            break;
+        case 2:
+            $count2++;
+            break;
+        case 3:
+            $count3++;
+            break;
+    }
     if ($value === $labelsArr[$key]) {
         $result++;
+        switch($value) {
+            case 1:
+                $result1++;
+                break;
+            case 2:
+                $result2++;
+                break;
+            case 3:
+                $result3++;
+                break;
+        }
     }
 }
-var_dump($max);
-var_dump($labels->toArray());
-var_dump($result);
+
+var_dump('correct predictions: ' . $result . ', ' . ($result/$count));
+var_dump('correct predictions 1: ' . $result1 . '/' . $count1 . ', ' . ($result1/$count1));
+var_dump('correct predictions 2: ' . $result2 . '/' . $count2 . ', ' . ($result2/$count2));
+var_dump('correct predictions 3: ' . $result3 . '/' . $count3 . ', ' . ($result3/$count3));
+var_dump($resultDetails);
 
 if($inputShape[2]==1) {
     array_pop($inputShape);
@@ -113,6 +148,9 @@ function importData()
                 continue;
             }
             if (strpos($file->getFilename(), 'sequence') !== false) {
+                if (! is_file($file->getPathname())) {
+                    continue;
+                }
                 if (!$currentSequence = json_decode(file_get_contents($file->getPathname()), true)) {
                     continue;
                 }
@@ -139,7 +177,7 @@ function importData()
                     $currentProcessedLabel[] = $action;
                     for ($i = 0; $i < 10; $i++) {
                         $imNew = modifyImageRandomly($im);
-                        $pixels = exportRGBArray($im);
+                        $pixels = exportRGBArray($imNew);
                         $currentProcessedImg[] = $pixels;
                         $currentProcessedLabel[] = $action;
 //                    $imNew->writeImage("sample$i$j.png");
@@ -258,49 +296,52 @@ function rinbowCNN(NeuralNetworks $nn, $inputShape): Sequential
     return $model;
 }
 
-function nvidiaCNN(NeuralNetworks $nn, $inputShape): Sequential
+function nvidiaCNNDave2(NeuralNetworks $nn, $inputShape): Sequential
 {
     $model = $nn->models()->Sequential([
         $nn->layers()->Conv2D(
-            $filters=24,
+            $filters=64,
             $kernel_size=5,
-            $strides=2,
+            strides:2,
             input_shape:$inputShape,
-            kernel_initializer:'he_normal',
-            activation:'relu'),
-        $nn->layers()->BatchNormalization(), //?
-        $nn->layers()->Conv2D(
-            $filters=36,
-            $kernel_size=5,
-            strides: 2,
             kernel_initializer:'he_normal'),
-        $nn->layers()->MaxPooling2D(), //?
+        $nn->layers()->BatchNormalization(),
+        $nn->layers()->Activation('relu'),
         $nn->layers()->Conv2D(
-            $filters=48,
+            $filters=64,
             $kernel_size=5,
-            $strides=2,
-            kernel_initializer:'he_normal',
-            activation:'relu'),
-        $nn->layers()->BatchNormalization(), //?
+            strides:2,
+            kernel_initializer:'he_normal'),
+        $nn->layers()->MaxPooling2D(),
         $nn->layers()->Conv2D(
-            $filters=64,
-            $kernel_size=3,
-            $strides=2,
-            kernel_initializer:'he_normal',
-            activation:'relu'),
-        $nn->layers()->MaxPooling2D(), //?
-        $nn->layers()->Dropout(0.2),
+            $filters=128,
+            $kernel_size=5,
+            strides:2,
+            kernel_initializer:'he_normal'),
+        $nn->layers()->BatchNormalization(),
+        $nn->layers()->Activation('relu'),
         $nn->layers()->Conv2D(
-            $filters=64,
+            $filters=128,
+            $kernel_size=3,
+            kernel_initializer:'he_normal'),
+        $nn->layers()->MaxPooling2D(),
+        $nn->layers()->Conv2D(
+            $filters=256,
             $kernel_size=3,
             kernel_initializer:'he_normal',
             activation:'relu'),
+        $nn->layers()->GlobalAveragePooling2D(),
+
+        $nn->layers()->Dense($units=512,
+            kernel_initializer:'he_normal'),
+        $nn->layers()->BatchNormalization(),
+        $nn->layers()->Activation('relu'),
         $nn->layers()->Flatten(),
         $nn->layers()->Dropout(0.2),
         $nn->layers()->Dense($units=100, activation:'relu'),
         $nn->layers()->Dense($units=50, activation:'relu'),
-        $nn->layers()->Dense($units=10, activation:'relu'),
-        $nn->layers()->Dense($units=1),
+        $nn->layers()->Dense($units=10,
+            activation:'softmax'),
     ]);
 
     $model->compile(
