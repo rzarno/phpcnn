@@ -5,26 +5,29 @@ namespace service;
 use Rindow\NeuralNetworks\Builder\NeuralNetworks;
 use Rindow\NeuralNetworks\Model\Sequential;
 
-class CNNArchitectureFactory
+class ModelCNNArchitectureFactory
 {
     function rinbowCNN(NeuralNetworks $nn, $inputShape): Sequential
     {
         $model = $nn->models()->Sequential([
             $nn->layers()->Conv2D(
                 $filters=64,
-                $kernel_size=3,
+                $kernel_size=5,
+                strides:[2,2],
                 input_shape:$inputShape,
                 kernel_initializer:'he_normal'),
             $nn->layers()->BatchNormalization(),
             $nn->layers()->Activation('relu'),
             $nn->layers()->Conv2D(
                 $filters=64,
-                $kernel_size=3,
+                $kernel_size=5,
+                strides:[2,2],
                 kernel_initializer:'he_normal'),
             $nn->layers()->MaxPooling2D(),
             $nn->layers()->Conv2D(
                 $filters=128,
-                $kernel_size=3,
+                $kernel_size=5,
+                strides:[2,2],
                 kernel_initializer:'he_normal'),
             $nn->layers()->BatchNormalization(),
             $nn->layers()->Activation('relu'),

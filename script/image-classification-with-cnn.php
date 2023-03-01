@@ -23,6 +23,9 @@ $testImg = array_slice($sequenceImg, 4500);
 $trainLabel = array_slice($sequenceLabel, 0, 4500);
 $testLabel = array_slice($sequenceLabel, 4500);
 
+unset($sequenceLabel);
+unset($sequenceImg);
+
 $train_img = new NDArrayPhp($trainImg, NDArray::int16, [4500,3,102,40]);
 $train_label = new NDArrayPhp($trainLabel, NDArray::int8, [4500]);
 $test_img = new NDArrayPhp($testImg, NDArray::int16, [1004,3,102,40]);
@@ -302,7 +305,7 @@ function nvidiaCNNDave2(NeuralNetworks $nn, $inputShape): Sequential
         $nn->layers()->Conv2D(
             $filters=64,
             $kernel_size=5,
-            strides:2,
+            strides:[2, 2],
             input_shape:$inputShape,
             kernel_initializer:'he_normal'),
         $nn->layers()->BatchNormalization(),
@@ -310,13 +313,13 @@ function nvidiaCNNDave2(NeuralNetworks $nn, $inputShape): Sequential
         $nn->layers()->Conv2D(
             $filters=64,
             $kernel_size=5,
-            strides:2,
+            strides:[2, 2],
             kernel_initializer:'he_normal'),
         $nn->layers()->MaxPooling2D(),
         $nn->layers()->Conv2D(
             $filters=128,
             $kernel_size=5,
-            strides:2,
+            strides:[2, 2],
             kernel_initializer:'he_normal'),
         $nn->layers()->BatchNormalization(),
         $nn->layers()->Activation('relu'),

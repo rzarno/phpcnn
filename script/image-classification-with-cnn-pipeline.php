@@ -6,12 +6,16 @@ use Rindow\Math\Matrix\NDArrayPhp;
 use Rindow\Math\Plot\Plot;
 use Rindow\NeuralNetworks\Builder\NeuralNetworks;
 use Interop\Polite\Math\Matrix\NDArray;
-use service\CNNArchitectureFactory;
+use service\ImageTransform;
+use service\LabelEncoder;
+use service\ModelCNNArchitectureFactory;
 use service\DataProvider;
 use service\ModelTraining;
 
-$dataProvider = new DataProvider();
-$cnnFactory = new CNNArchitectureFactory();
+$modelVersion = 1.0;
+
+$dataProvider = new DataProvider(new ImageTransform(), new LabelEncoder());
+$cnnFactory = new ModelCNNArchitectureFactory();
 $modelTrain = new ModelTraining();
 
 $mo = new MatrixOperator();
@@ -28,6 +32,9 @@ $testImg = array_slice($sequenceImg, 4500);
 
 $trainLabel = array_slice($sequenceLabel, 0, 4500);
 $testLabel = array_slice($sequenceLabel, 4500);
+
+unset($sequenceLabel);
+unset($sequenceImg);
 
 $train_img = new NDArrayPhp($trainImg, NDArray::int16, [4500,3,102,40]);
 $train_label = new NDArrayPhp($trainLabel, NDArray::int8, [4500]);
