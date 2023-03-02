@@ -305,7 +305,7 @@ function nvidiaCNNDave2(NeuralNetworks $nn, $inputShape): Sequential
         $nn->layers()->Conv2D(
             $filters=64,
             $kernel_size=5,
-            strides:[2, 2],
+//            strides:[2, 2],
             input_shape:$inputShape,
             kernel_initializer:'he_normal'),
         $nn->layers()->BatchNormalization(),
@@ -313,13 +313,13 @@ function nvidiaCNNDave2(NeuralNetworks $nn, $inputShape): Sequential
         $nn->layers()->Conv2D(
             $filters=64,
             $kernel_size=5,
-            strides:[2, 2],
+//            strides:[2, 2],
             kernel_initializer:'he_normal'),
         $nn->layers()->MaxPooling2D(),
         $nn->layers()->Conv2D(
             $filters=128,
             $kernel_size=5,
-            strides:[2, 2],
+//            strides:[2, 2],
             kernel_initializer:'he_normal'),
         $nn->layers()->BatchNormalization(),
         $nn->layers()->Activation('relu'),
