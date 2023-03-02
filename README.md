@@ -8,8 +8,11 @@ Car has to follow track inside created lane.
 
 
 CNN model is based on Nvidia "DAVE 2" proposed architecture
+
 https://arxiv.org/pdf/1604.07316v1.pdf
+
 model implementation and training was handled thanks to Rindow Neural Networks
+
 https://github.com/rindow/rindow-neuralnetworks
 
 
