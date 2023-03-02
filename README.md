@@ -6,6 +6,7 @@ Car has to follow track inside created lane.
 <img src="./gallery/raspberry_pi_car.jpg" width="430"/>
 <img src="./gallery/self_driving.gif" width="430"/>
 
+## Project base components
 
 CNN model is based on Nvidia "DAVE 2" proposed architecture
 
@@ -15,6 +16,8 @@ model implementation and training was handled thanks to Rindow Neural Networks
 
 https://github.com/rindow/rindow-neuralnetworks
 
+
+## Setup
 
 To train and test model run:
 
