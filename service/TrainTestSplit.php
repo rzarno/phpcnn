@@ -17,8 +17,8 @@ class TrainTestSplit
 
         $trainImgNDArray = new NDArrayPhp($trainImg, NDArray::int16, [4500, $numLayers, $imgWidth, $imgHeight]);
         $trainLabelNDArray = new NDArrayPhp($trainLabel, NDArray::int8, [4500]);
-        $testImgNDArray = new NDArrayPhp($testImg, NDArray::int16, [1004,$numLayers, $imgWidth, $imgHeight]);
+        $testImgNDArray = new NDArrayPhp($testImg, NDArray::int16, [1004, $numLayers, $imgWidth, $imgHeight]);
         $testLabelNDArray = new NDArrayPhp($testLabel, NDArray::int8, [1004]);
-        return [$trainImgNDArray, $trainLabelNDArray, $testImgNDArray, $testLabelNDArray];
+        return [$trainImgNDArray, $testImgNDArray, $trainLabelNDArray, $testLabelNDArray];
     }
 }
