@@ -17,6 +17,7 @@ $modelVersion = 1.0;
 $dataProvider = new DataProvider(new ImageTransform(), new LabelEncoder());
 $cnnFactory = new ModelCNNArchitectureFactory();
 $modelTrain = new ModelTraining();
+$resultsEvaluator = new ResultsEvaluator();
 
 $mo = new MatrixOperator();
 $nn = new NeuralNetworks($mo);
@@ -78,59 +79,12 @@ if(file_exists($modelFilePath)) {
 $images = $test_img[[200,400]];
 $labels = $test_label[[200,400]];
 $predicts = $model->predict($images);
-$max = [];
-foreach ($predicts as $single) {
-    $max[] = array_keys($single->toArray(), max($single->toArray()))[0];
-}
 
-$count = count($max);
-$count1 = 0;
-$count2 = 0;
-$count3 = 0;
-$result = 0;
-$result1 = 0;
-$result2 = 0;
-$result3 = 0;
-$resultDetails = [];
-$labelsArr = $labels->toArray();
-foreach ($max as $key => $value) {
-    $resultDetails[] = ['real'=> $labelsArr[$key], 'pred' => $value];
-    switch($labelsArr[$key]) {
-        case 1:
-            $count1++;
-            break;
-        case 2:
-            $count2++;
-            break;
-        case 3:
-            $count3++;
-            break;
-    }
-    if ($value === $labelsArr[$key]) {
-        $result++;
-        switch($value) {
-            case 1:
-                $result1++;
-                break;
-            case 2:
-                $result2++;
-                break;
-            case 3:
-                $result3++;
-                break;
-        }
-    }
-}
+$resultsEvaluator->evaluate($predicts, $labels);
 
-var_dump('correct predictions: ' . $result . ', ' . ($result/$count));
-var_dump('correct predictions 1: ' . $result1 . '/' . $count1 . ', ' . ($result1/$count1));
-var_dump('correct predictions 2: ' . $result2 . '/' . $count2 . ', ' . ($result2/$count2));
-var_dump('correct predictions 3: ' . $result3 . '/' . $count3 . ', ' . ($result3/$count3));
-var_dump($resultDetails);
-
-if($inputShape[2]==1) {
-    array_pop($inputShape);
-}
+//if($inputShape[2]==1) {
+//    array_pop($inputShape);
+//}
 $plt->setConfig([
     'frame.xTickLength'=>0,'title.position'=>'down','title.margin'=>0,]);
 [$fig,$axes] = $plt->subplots(4,4);
