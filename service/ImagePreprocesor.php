@@ -11,10 +11,10 @@ class ImagePreprocesor
       private MatrixOperator $matrixOperator
     ) {}
 
-    function flattenAndNormalizeImage($train_img, $inputShape): NDArray
+    function flattenAndNormalizeImage($trainImg, $inputShape): NDArray
     {
-        $dataSize = $train_img->shape()[0];
-        $train_img = $train_img->reshape(array_merge([$dataSize],$inputShape));
-        return $this->matrixOperator->scale(1.0/255.0, $this->matrixOperator->astype($train_img,NDArray::float32));
+        $dataSize = $trainImg->shape()[0];
+        $trainImg = $trainImg->reshape(array_merge([$dataSize],$inputShape));
+        return $this->matrixOperator->scale(1.0/255.0, $this->matrixOperator->astype($trainImg,NDArray::float32));
     }
 }

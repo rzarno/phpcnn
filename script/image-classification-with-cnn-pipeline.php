@@ -44,10 +44,10 @@ echo "test=[".implode(',',$testImg->shape())."]\n";
 echo "batch_size={$batch_size}\n";
 
 echo "formating train image ...\n";
-$trainImg = $imagePreprocessor->flattenAndNormalizeImage($trainImg,$inputShape);
+$trainImg = $imagePreprocessor->flattenAndNormalizeImage($trainImg, $inputShape);
 $trainLabel = $matrixOperator->la()->astype($trainLabel,NDArray::int32);
 echo "formating test image ...\n";
-$testImg  = $imagePreprocessor->flattenAndNormalizeImage($testImg,$inputShape);
+$testImg  = $imagePreprocessor->flattenAndNormalizeImage($testImg, $inputShape);
 $testLabel = $matrixOperator->la()->astype($testLabel,NDArray::int32);
 
 if(file_exists($modelFilePath)) {
