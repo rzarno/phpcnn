@@ -10,11 +10,14 @@ use Rindow\NeuralNetworks\Model\Sequential;
 
 class ModelTraining
 {
+    public function __construct(
+        private Plot $plt,
+        private MatrixOperator $matrixOperator
+    ) {}
+
     function trainModel(
         NeuralNetworks $nn,
-        MatrixOperator $mo,
         Sequential $model,
-        Plot $plt,
         NDArray $train_img,
         NDArray $train_label,
         NDArray $test_img,
@@ -36,11 +39,11 @@ class ModelTraining
             epochs:$epochs,
             validation_data:[$test_img,$test_label]);
         $model->save($modelFilePath,$portable=true);
-        $plt->plot($mo->array($history['accuracy']),null,null,'accuracy');
-        $plt->plot($mo->array($history['val_accuracy']),null,null,'val_accuracy');
-        $plt->plot($mo->array($history['loss']),null,null,'loss');
-        $plt->plot($mo->array($history['val_loss']),null,null,'val_loss');
-        $plt->legend();
-        $plt->title('Lane driving action classification');
+        $this->plt->plot($this->matrixOperator->array($history['accuracy']),null,null,'accuracy');
+        $this->plt->plot($this->matrixOperator->array($history['val_accuracy']),null,null,'val_accuracy');
+        $this->plt->plot($this->matrixOperator->array($history['loss']),null,null,'loss');
+        $this->plt->plot($this->matrixOperator->array($history['val_loss']),null,null,'val_loss');
+        $this->plt->legend();
+        $this->plt->title('Lane driving action classification');
     }
 }

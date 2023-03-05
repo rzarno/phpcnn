@@ -1,8 +1,34 @@
 <?php
+namespace service;
 
 use Interop\Polite\Math\Matrix\NDArray;
+use Rindow\Math\Plot\Plot;
 
-class ResultsEvaluator {
+class ModelEvaluator {
+
+    public function __construct(
+        private Plot $plt
+    ){
+    }
+
+    public function showResulPlot()
+    {
+        $plt = new Plot(null,$mo);
+        $plt->setConfig([
+            'frame.xTickLength'=>0,'title.position'=>'down','title.margin'=>0,]);
+        [$fig,$axes] = $this->plt->subplots(4,4);
+        foreach ($predicts as $i => $predict) {
+            $axes[$i*2]->imshow($images[$i]->reshape($inputShape),
+                null,null,null,$origin='upper');
+            $axes[$i*2]->setFrame(false);
+            $label = $labels[$i];
+            $axes[$i*2]->setTitle($classNames[$label]."($label)");
+            $axes[$i*2+1]->bar($mo->arange(10),$predict);
+        }
+
+        $this->plt->show();
+    }
+
     public function evaluate(NDArray $predicts, NDArray $labels)
     {
         $max = [];

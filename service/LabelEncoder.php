@@ -4,7 +4,7 @@ namespace service;
 
 class LabelEncoder
 {
-    function encodeAction(string $actionBefore)
+    function encodeAction(string $actionBefore): ?int
     {
         $action = null;
         switch ($actionBefore) {

@@ -3,6 +3,7 @@
 namespace service;
 
 use DirectoryIterator;
+use Imagick;
 
 class DataProvider
 {
@@ -21,7 +22,7 @@ class DataProvider
         $sequenceImg = [];
         $sequenceLabel = [];
         $parentPath = '../image/sequence';
-        foreach (new DirectoryIterator($parentPath) as $j => $fileInfo) {
+        foreach (new DirectoryIterator($parentPath) as $fileInfo) {
             if (!$fileInfo->isDir()) {
                 continue;
             }
@@ -46,11 +47,11 @@ class DataProvider
                         }
                         $photoPath = str_replace('./sequences', '../image/sequence', $step['photo']);
                         /* Create new object */
-                        $im = new \Imagick($photoPath);
+                        $im = new Imagick($photoPath);
                         /* Export the image pixels */
-                        $im->resizeImage(102, 80, imagick::FILTER_GAUSSIAN, 1);
+                        $im->resizeImage(102, 80, Imagick::FILTER_GAUSSIAN, 1);
                         $im->cropImage(102, 40, 0, 40);
-                        $im->setColorspace(imagick::COLORSPACE_YUV);
+                        $im->setColorspace(Imagick::COLORSPACE_YUV);
                         if (count($currentProcessedImg) === 12) {
 //                    $im->writeImage('sample.png');
                         }
