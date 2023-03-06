@@ -4,8 +4,10 @@ namespace service;
 
 use DirectoryIterator;
 use Imagick;
+use League\Pipeline\StageInterface;
+use service\model\Payload;
 
-class DataProvider
+class DataProvider implements StageInterface
 {
     private ImageTransform $imageTransform;
     private LabelEncoder $labelEncoder;
@@ -86,5 +88,14 @@ class DataProvider
             $sequenceLabel[] = $val[1];
         }
         return [$sequenceImg, $sequenceLabel];
+    }
+
+    /**
+     * @param Payload $payload
+     */
+    public function __invoke($payload)
+    {
+        [$sequenceImg, $sequenceLabel] =  $this->importData();
+        $payload->setSequenceImg($sequenceImg)->setSequenceLabel($sequenceLabel);
     }
 }

@@ -1,6 +1,8 @@
 <?php
 require __DIR__.'/../vendor/autoload.php';
 
+use League\Pipeline\FingersCrossedProcessor;
+use League\Pipeline\Pipeline;
 use Rindow\Math\Matrix\MatrixOperator;
 use Rindow\Math\Plot\Plot;
 use Rindow\NeuralNetworks\Builder\NeuralNetworks;
@@ -8,6 +10,7 @@ use Interop\Polite\Math\Matrix\NDArray;
 use service\ImagePreprocesor;
 use service\ImageTransform;
 use service\LabelEncoder;
+use service\model\Payload;
 use service\ModelCNNArchitectureFactory;
 use service\DataProvider;
 use service\ModelTraining;
@@ -24,24 +27,23 @@ $resultsEvaluator = new ModelEvaluator($plot);
 $trainTestSplit = new TrainTestSplit();
 $imagePreprocessor = new ImagePreprocesor($matrixOperator);
 
-$modelVersion = 1.0;
-$epochs = 10;
-$batch_size = 64;
-$version = '1.0';
-$imgWidth = 102;
-$imgHeight = 40;
-$numLayers = 3;
-$modelFilePath = __DIR__."/../model/image-classification-with-cnn-{$version}.model";
+$payload = new Payload(
+    $configModelVersion = '1.0',
+    $configEpochs = 10,
+    $configBatchSize = 64,
+    $configImgWidth = 102,
+    $configImgHeight = 40,
+    $configNumImgLayers = 3,
+    $configModelFilePath = __DIR__."/../model/image-classification-with-cnn-{$configModelVersion}.model",
+    $configClassNames = [1, 2, 3]
+);
 
-[$sequenceImg, $sequenceLabel] = $dataProvider->importData();
+$pipeline = (new Pipeline(new FingersCrossedProcessor()))
+    ->pipe($dataProvider)
+    ->pipe($trainTestSplit);
 
-[$trainImg, $testImg, $trainLabel, $testLabel] = $trainTestSplit->trainTestSplit($sequenceImg, $sequenceLabel, $imgWidth, $imgHeight, $numLayers);
-$inputShape = [$imgWidth, $imgHeight, $numLayers];
-$classNames = [1, 2, 3];
 
-echo "train=[".implode(',',$trainImg->shape())."]\n";
-echo "test=[".implode(',',$testImg->shape())."]\n";
-echo "batch_size={$batch_size}\n";
+
 
 echo "formating train image ...\n";
 $trainImg = $imagePreprocessor->flattenAndNormalizeImage($trainImg, $inputShape);
@@ -59,7 +61,7 @@ if(file_exists($modelFilePath)) {
 //    $model = $cnnFactory->createRinbowCNN($nn, $inputShape);
     $model = $cnnFactory->createNvidiaCNNDave2($inputShape);
     echo "training model ...\n";
-    $modelTrain->trainModel($neuralNetworks, $model, $trainImg, $trainLabel, $testImg, $testLabel, $batch_size, $epochs, $modelFilePath);
+    $modelTrain->trainModel($neuralNetworks, $model, $trainImg, $trainLabel, $testImg, $testLabel, $batchSize, $epochs, $modelFilePath);
 }
 
 $images = $testImg[[200,400]];

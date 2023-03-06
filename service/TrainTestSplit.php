@@ -3,9 +3,11 @@
 namespace service;
 
 use Interop\Polite\Math\Matrix\NDArray;
+use League\Pipeline\StageInterface;
 use Rindow\Math\Matrix\NDArrayPhp;
+use service\model\Payload;
 
-class TrainTestSplit
+class TrainTestSplit implements StageInterface
 {
     public function trainTestSplit(array $sequenceImg, array $sequenceLabel, int $imgWidth, int $imgHeight, int $numLayers): array
     {
@@ -20,5 +22,28 @@ class TrainTestSplit
         $testImgNDArray = new NDArrayPhp($testImg, NDArray::int16, [1004, $numLayers, $imgWidth, $imgHeight]);
         $testLabelNDArray = new NDArrayPhp($testLabel, NDArray::int8, [1004]);
         return [$trainImgNDArray, $testImgNDArray, $trainLabelNDArray, $testLabelNDArray];
+    }
+
+    /**
+     * @param Payload $payload
+     */
+    public function __invoke($payload)
+    {
+        [$trainImg, $testImg, $trainLabel, $testLabel] = $this->trainTestSplit(
+            $payload->getSequenceImg(),
+            $payload->getSequenceLabel(),
+            $payload->getConfigImgWidth(),
+            $payload->getConfigImgHeight(),
+            $payload->getConfigNumImgLayers()
+        );
+
+        $payload->setTrainImg($trainImg)
+            ->setTrainLabel($trainLabel)
+            ->setTestImg($testImg)
+            ->setTestLabel($testLabel);
+
+        echo "train=[". implode(',', $trainImg->shape()) . "]\n";
+        echo "test=[". implode(',', $testImg->shape()) . "]\n";
+        echo "batch_size={" . $payload->getConfigBatchSize() . "}\n";
     }
 }
