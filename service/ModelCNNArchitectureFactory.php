@@ -7,8 +7,13 @@ use Rindow\NeuralNetworks\Model\Sequential;
 
 class ModelCNNArchitectureFactory
 {
-    function rinbowCNN(NeuralNetworks $nn, $inputShape): Sequential
+    public function __construct(
+        private readonly NeuralNetworks $neuralNetworks
+    ) {}
+
+    function rinbowCNN($inputShape): Sequential
     {
+        $nn = $this->neuralNetworks;
         $model = $nn->models()->Sequential([
             $nn->layers()->Conv2D(
                 $filters=64,
@@ -58,13 +63,14 @@ class ModelCNNArchitectureFactory
         return $model;
     }
 
-    function createNvidiaCNNDave2(NeuralNetworks $nn, $inputShape): Sequential
+    function createNvidiaCNNDave2($inputShape): Sequential
     {
+        $nn = $this->neuralNetworks;
         $model = $nn->models()->Sequential([
             $nn->layers()->Conv2D(
                 $filters=64,
                 $kernel_size=5,
-                strides:2,
+//                strides:2,
                 input_shape:$inputShape,
                 kernel_initializer:'he_normal'),
             $nn->layers()->BatchNormalization(),
@@ -78,7 +84,7 @@ class ModelCNNArchitectureFactory
             $nn->layers()->Conv2D(
                 $filters=128,
                 $kernel_size=5,
-                strides:2,
+//                strides:2,
                 kernel_initializer:'he_normal'),
             $nn->layers()->BatchNormalization(),
             $nn->layers()->Activation('relu'),

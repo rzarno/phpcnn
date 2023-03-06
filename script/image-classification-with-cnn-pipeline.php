@@ -17,12 +17,12 @@ use service\TrainTestSplit;
 $matrixOperator = new MatrixOperator();
 $plot = new Plot();
 $dataProvider = new DataProvider(new ImageTransform(), new LabelEncoder());
-$cnnFactory = new ModelCNNArchitectureFactory();
+$neuralNetworks = new NeuralNetworks($matrixOperator);
+$cnnFactory = new ModelCNNArchitectureFactory($neuralNetworks);
 $modelTrain = new ModelTraining($plot, $matrixOperator);
 $resultsEvaluator = new ModelEvaluator($plot);
 $trainTestSplit = new TrainTestSplit();
 $imagePreprocessor = new ImagePreprocesor($matrixOperator);
-$neuralNetworks = new NeuralNetworks($matrixOperator);
 
 $modelVersion = 1.0;
 $epochs = 10;
@@ -31,7 +31,7 @@ $version = '1.0';
 $imgWidth = 102;
 $imgHeight = 40;
 $numLayers = 3;
-$modelFilePath = __DIR__."/image-classification-with-cnn-{$version}.model";
+$modelFilePath = __DIR__."/../model/image-classification-with-cnn-{$version}.model";
 
 [$sequenceImg, $sequenceLabel] = $dataProvider->importData();
 
@@ -57,7 +57,7 @@ if(file_exists($modelFilePath)) {
 } else {
     echo "creating model ...\n";
 //    $model = $cnnFactory->createRinbowCNN($nn, $inputShape);
-    $model = $cnnFactory->createNvidiaCNNDave2($neuralNetworks, $inputShape);
+    $model = $cnnFactory->createNvidiaCNNDave2($inputShape);
     echo "training model ...\n";
     $modelTrain->trainModel($neuralNetworks, $model, $trainImg, $trainLabel, $testImg, $testLabel, $batch_size, $epochs, $modelFilePath);
 }
