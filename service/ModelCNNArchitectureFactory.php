@@ -78,7 +78,7 @@ class ModelCNNArchitectureFactory
             $nn->layers()->Conv2D(
                 $filters=64,
                 $kernel_size=5,
-                strides:2,
+//                strides:2,
                 kernel_initializer:'he_normal'),
             $nn->layers()->MaxPooling2D(),
             $nn->layers()->Conv2D(
