@@ -1,22 +1,24 @@
 <?php
 
-namespace service;
+namespace service\stage;
 
 use Interop\Polite\Math\Matrix\NDArray;
+use League\Pipeline\StageInterface;
 use Rindow\Math\Matrix\MatrixOperator;
 use Rindow\Math\Plot\Plot;
 use Rindow\NeuralNetworks\Builder\NeuralNetworks;
 use Rindow\NeuralNetworks\Model\Sequential;
+use service\model\Payload;
 
-class ModelTraining
+class ModelTraining implements StageInterface
 {
     public function __construct(
-        private Plot $plt,
-        private MatrixOperator $matrixOperator
+        private readonly Plot $plt,
+        private readonly MatrixOperator $matrixOperator,
+        private readonly NeuralNetworks $neuralNetworks
     ) {}
 
     function trainModel(
-        NeuralNetworks $nn,
         Sequential $model,
         NDArray $train_img,
         NDArray $train_label,
@@ -26,7 +28,7 @@ class ModelTraining
         int $epochs,
         string $modelFilePath
     ) {
-        $train_dataset = $nn->data->ImageDataGenerator($train_img,
+        $train_dataset = $this->neuralNetworks->data->ImageDataGenerator($train_img,
             tests:$train_label,
             batch_size:$batch_size,
             shuffle:true,
@@ -38,12 +40,33 @@ class ModelTraining
         $history = $model->fit($train_dataset,null,
             epochs:$epochs,
             validation_data:[$test_img,$test_label]);
-        $model->save($modelFilePath,$portable=true);
+
         $this->plt->plot($this->matrixOperator->array($history['accuracy']),null,null,'accuracy');
         $this->plt->plot($this->matrixOperator->array($history['val_accuracy']),null,null,'val_accuracy');
         $this->plt->plot($this->matrixOperator->array($history['loss']),null,null,'loss');
         $this->plt->plot($this->matrixOperator->array($history['val_loss']),null,null,'val_loss');
         $this->plt->legend();
         $this->plt->title('Lane driving action classification');
+    }
+
+    /**
+     * @param Payload $payload
+     * @return Payload
+     */
+    public function __invoke($payload)
+    {
+        echo "training model ...\n";
+        $this->trainModel(
+            $payload->getModel(),
+            $payload->getTrainImg(),
+            $payload->getTrainLabel(),
+            $payload->getTestImg(),
+            $payload->getTestLabel(),
+            $payload->getConfigBatchSize(),
+            $payload->getConfigNumEpochs(),
+            $payload->getConfigModelFilePath()
+        );
+
+        return $payload;
     }
 }

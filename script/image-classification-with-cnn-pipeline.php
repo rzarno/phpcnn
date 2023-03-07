@@ -6,26 +6,27 @@ use League\Pipeline\Pipeline;
 use Rindow\Math\Matrix\MatrixOperator;
 use Rindow\Math\Plot\Plot;
 use Rindow\NeuralNetworks\Builder\NeuralNetworks;
-use Interop\Polite\Math\Matrix\NDArray;
-use service\ImagePreprocesor;
 use service\ImageTransform;
 use service\LabelEncoder;
 use service\model\Payload;
-use service\ModelCNNArchitectureFactory;
-use service\DataProvider;
-use service\ModelTraining;
-use service\ModelEvaluator;
-use service\TrainTestSplit;
+use service\stage\DataProvider;
+use service\stage\ImagePreprocesor;
+use service\stage\ModelCNNArchitectureFactory;
+use service\stage\ModelEvaluator;
+use service\stage\ModelExport;
+use service\stage\ModelTraining;
+use service\stage\TrainTestSplit;
 
 $matrixOperator = new MatrixOperator();
 $plot = new Plot();
 $dataProvider = new DataProvider(new ImageTransform(), new LabelEncoder());
 $neuralNetworks = new NeuralNetworks($matrixOperator);
-$cnnFactory = new ModelCNNArchitectureFactory($neuralNetworks);
-$modelTrain = new ModelTraining($plot, $matrixOperator);
-$resultsEvaluator = new ModelEvaluator($plot);
+$cnnModelFactory = new ModelCNNArchitectureFactory($neuralNetworks);
+$modelTrain = new ModelTraining($plot, $matrixOperator, $neuralNetworks);
+$resultsEvaluator = new ModelEvaluator($plot, $matrixOperator);
 $trainTestSplit = new TrainTestSplit();
 $imagePreprocessor = new ImagePreprocesor($matrixOperator);
+$modelExport = new ModelExport();
 
 $payload = new Payload(
     $configModelVersion = '1.0',
@@ -40,33 +41,17 @@ $payload = new Payload(
 
 $pipeline = (new Pipeline(new FingersCrossedProcessor()))
     ->pipe($dataProvider)
-    ->pipe($trainTestSplit);
+    ->pipe($trainTestSplit)
+    ->pipe($imagePreprocessor)
+    ->pipe($cnnModelFactory)
+    ->pipe($modelTrain)
+    ->pipe($modelExport)
+    ->pipe($resultsEvaluator);
 
+$pipeline->process($payload);
 
-
-
-echo "formating train image ...\n";
-$trainImg = $imagePreprocessor->flattenAndNormalizeImage($trainImg, $inputShape);
-$trainLabel = $matrixOperator->la()->astype($trainLabel,NDArray::int32);
-echo "formating test image ...\n";
-$testImg  = $imagePreprocessor->flattenAndNormalizeImage($testImg, $inputShape);
-$testLabel = $matrixOperator->la()->astype($testLabel,NDArray::int32);
-
-if(file_exists($modelFilePath)) {
+if(file_exists($payload->getConfigModelFilePath())) {
     echo "loading model ...\n";
-    $model = $neuralNetworks->models()->loadModel($modelFilePath);
+    $model = $neuralNetworks->models()->loadModel($payload->getConfigModelFilePath());
     $model->summary();
-} else {
-    echo "creating model ...\n";
-//    $model = $cnnFactory->createRinbowCNN($nn, $inputShape);
-    $model = $cnnFactory->createNvidiaCNNDave2($inputShape);
-    echo "training model ...\n";
-    $modelTrain->trainModel($neuralNetworks, $model, $trainImg, $trainLabel, $testImg, $testLabel, $batchSize, $epochs, $modelFilePath);
 }
-
-$images = $testImg[[200,400]];
-$labels = $testLabel[[200,400]];
-$predicts = $model->predict($images);
-
-$resultsEvaluator->evaluate($predicts, $labels);
-

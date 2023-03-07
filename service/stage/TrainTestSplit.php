@@ -1,6 +1,6 @@
 <?php
 
-namespace service;
+namespace service\stage;
 
 use Interop\Polite\Math\Matrix\NDArray;
 use League\Pipeline\StageInterface;
@@ -26,9 +26,11 @@ class TrainTestSplit implements StageInterface
 
     /**
      * @param Payload $payload
+     * @return Payload
      */
     public function __invoke($payload)
     {
+        echo "split to train and test set\n";
         [$trainImg, $testImg, $trainLabel, $testLabel] = $this->trainTestSplit(
             $payload->getSequenceImg(),
             $payload->getSequenceLabel(),
@@ -45,5 +47,7 @@ class TrainTestSplit implements StageInterface
         echo "train=[". implode(',', $trainImg->shape()) . "]\n";
         echo "test=[". implode(',', $testImg->shape()) . "]\n";
         echo "batch_size={" . $payload->getConfigBatchSize() . "}\n";
+
+        return $payload;
     }
 }

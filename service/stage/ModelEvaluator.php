@@ -1,19 +1,29 @@
 <?php
-namespace service;
+namespace service\stage;
 
 use Interop\Polite\Math\Matrix\NDArray;
+use League\Pipeline\StageInterface;
+use Rindow\Math\Matrix\MatrixOperator;
 use Rindow\Math\Plot\Plot;
+use service\model\Payload;
 
-class ModelEvaluator {
+class ModelEvaluator implements StageInterface
+{
 
     public function __construct(
-        private Plot $plt
+        private readonly Plot $plt,
+        private readonly MatrixOperator $matrixOperator
     ){
     }
 
-    public function showResulPlot()
-    {
-        $plt = new Plot(null,$mo);
+    public function showResulPlot(
+        $predicts,
+        $images,
+        $inputShape,
+        $labels,
+        $classNames
+    ) {
+        $plt = new Plot(null, $this->matrixOperator);
         $plt->setConfig([
             'frame.xTickLength'=>0,'title.position'=>'down','title.margin'=>0,]);
         [$fig,$axes] = $this->plt->subplots(4,4);
@@ -23,7 +33,7 @@ class ModelEvaluator {
             $axes[$i*2]->setFrame(false);
             $label = $labels[$i];
             $axes[$i*2]->setTitle($classNames[$label]."($label)");
-            $axes[$i*2+1]->bar($mo->arange(10),$predict);
+            $axes[$i*2+1]->bar($this->matrixOperator->arange(10),$predict);
         }
 
         $this->plt->show();
@@ -82,4 +92,27 @@ class ModelEvaluator {
         var_dump($resultDetails);
     }
 
+    /**
+     * @param Payload $payload
+     * @return Payload
+     */
+    public function __invoke($payload)
+    {
+        echo "evaluate model \n";
+        $images = $payload->getTestImg()[[200,400]];
+        $labels = $payload->getTestLabel()[[200,400]];
+        $predicts = $payload->getModel()->predict($images);
+
+        $this->showResulPlot(
+            $predicts,
+            $images,
+            $payload->getConfigInputShape(),
+            $labels,
+            $payload->getConfigClassNames()
+        );
+
+        $this->evaluate($predicts, $labels);
+
+        return $payload;
+    }
 }

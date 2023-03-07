@@ -1,26 +1,24 @@
 <?php
 
-namespace service;
+namespace service\stage;
 
 use DirectoryIterator;
 use Imagick;
 use League\Pipeline\StageInterface;
+use service\ImageTransform;
+use service\LabelEncoder;
 use service\model\Payload;
 
 class DataProvider implements StageInterface
 {
-    private ImageTransform $imageTransform;
-    private LabelEncoder $labelEncoder;
     public function __construct(
-        ImageTransform $imageTransform,
-        LabelEncoder $labelEncoder
-    ) {
-        $this->imageTransform = $imageTransform;
-        $this->labelEncoder = $labelEncoder;
-    }
+        private readonly ImageTransform $imageTransform,
+        private readonly LabelEncoder $labelEncoder
+    ) {}
 
     function importData()
     {
+        echo "importing data\n";
         $sequenceImg = [];
         $sequenceLabel = [];
         $parentPath = '../image/sequence';
@@ -97,5 +95,6 @@ class DataProvider implements StageInterface
     {
         [$sequenceImg, $sequenceLabel] =  $this->importData();
         $payload->setSequenceImg($sequenceImg)->setSequenceLabel($sequenceLabel);
+        return $payload;
     }
 }

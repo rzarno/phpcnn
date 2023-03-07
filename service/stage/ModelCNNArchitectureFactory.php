@@ -1,11 +1,13 @@
 <?php
 
-namespace service;
+namespace service\stage;
 
+use League\Pipeline\StageInterface;
 use Rindow\NeuralNetworks\Builder\NeuralNetworks;
 use Rindow\NeuralNetworks\Model\Sequential;
+use service\model\Payload;
 
-class ModelCNNArchitectureFactory
+class ModelCNNArchitectureFactory implements StageInterface
 {
     public function __construct(
         private readonly NeuralNetworks $neuralNetworks
@@ -118,5 +120,19 @@ class ModelCNNArchitectureFactory
         );
         $model->summary();
         return $model;
+    }
+
+    /**
+     * @param Payload $payload
+     * @return Payload
+     */
+    public function __invoke($payload)
+    {
+        echo "building model...\n";
+//    $model = $this->createRinbowCNN($payload->getConfigInputShape());
+        $model = $this->createNvidiaCNNDave2($payload->getConfigInputShape());
+        $payload->setModel($model);
+
+        return $payload;
     }
 }
