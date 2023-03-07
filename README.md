@@ -16,6 +16,17 @@ model implementation and training was handled thanks to Rindow Neural Networks
 
 https://github.com/rindow/rindow-neuralnetworks
 
+main program is based on chain of responsibility design pattern implemented using league/pipeline and containing stages:
+1. Import data
+2. Analyze dataset
+3. Impute more data based on imported images
+4. Split data to training and test set
+5. Preprocess images - scale and flatten
+6. Build convolutional neural network model from specified layers
+7. Train model
+8. Export model
+9. Evaluate model
+
 
 ## Setup
 
