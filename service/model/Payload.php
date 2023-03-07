@@ -8,6 +8,7 @@ use Rindow\NeuralNetworks\Model\Sequential;
 
 class Payload
 {
+    private ?array $importedData;
     private array $sequenceImg;
     private array $sequenceLabel;
     private array $configInputShape;
@@ -32,6 +33,17 @@ class Payload
         private readonly array $configClassNames
     ) {
         $this->configInputShape = [$this->configImgWidth, $this->configImgHeight, $this->configNumImgLayers];
+    }
+
+    public function getImportedData(): ?array
+    {
+        return $this->importedData;
+    }
+
+    public function setImportedData(?array $importedData): Payload
+    {
+        $this->importedData = $importedData;
+        return $this;
     }
 
     public function getConfigModelVersion(): string

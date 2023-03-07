@@ -9,6 +9,8 @@ use Rindow\NeuralNetworks\Builder\NeuralNetworks;
 use service\ImageTransform;
 use service\LabelEncoder;
 use service\model\Payload;
+use service\stage\DataAnalyzer;
+use service\stage\DataImputer;
 use service\stage\DataProvider;
 use service\stage\ImagePreprocesor;
 use service\stage\ModelCNNArchitectureFactory;
@@ -19,7 +21,9 @@ use service\stage\TrainTestSplit;
 
 $matrixOperator = new MatrixOperator();
 $plot = new Plot();
-$dataProvider = new DataProvider(new ImageTransform(), new LabelEncoder());
+$dataProvider = new DataProvider();
+$dataAnalyzer = new DataAnalyzer();
+$dataImputer = new DataImputer(new ImageTransform(), new LabelEncoder());
 $neuralNetworks = new NeuralNetworks($matrixOperator);
 $cnnModelFactory = new ModelCNNArchitectureFactory($neuralNetworks);
 $modelTrain = new ModelTraining($plot, $matrixOperator, $neuralNetworks);
@@ -41,6 +45,8 @@ $payload = new Payload(
 
 $pipeline = (new Pipeline(new FingersCrossedProcessor()))
     ->pipe($dataProvider)
+    ->pipe($dataAnalyzer)
+    ->pipe($dataImputer)
     ->pipe($trainTestSplit)
     ->pipe($imagePreprocessor)
     ->pipe($cnnModelFactory)
