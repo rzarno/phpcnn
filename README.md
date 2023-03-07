@@ -34,4 +34,4 @@ To train and test model run:
 
 `composer install`
 
-`php image-classification-with-cnn-pipeline.php`
+`php script/image-classification-with-cnn-pipeline.php`
