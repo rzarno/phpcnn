@@ -58,10 +58,10 @@ class ModelTraining implements StageInterface
         echo "training model ...\n";
         $this->trainModel(
             $payload->getModel(),
-            $payload->getTrainImg(),
-            $payload->getTrainLabel(),
-            $payload->getTestImg(),
-            $payload->getTestLabel(),
+            $payload->getNormalizedTrainImg(),
+            $payload->getNormalizedTrainLabel(),
+            $payload->getNormalizedTestImg(),
+            $payload->getNormalizedTestLabel(),
             $payload->getConfigBatchSize(),
             $payload->getConfigNumEpochs(),
             $payload->getConfigModelFilePath()
