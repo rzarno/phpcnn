@@ -99,8 +99,8 @@ class ModelEvaluator implements StageInterface
     public function __invoke($payload)
     {
         echo "evaluate model \n";
-        $images = $payload->getNormalizedTestImg()[[200,400]];
-        $labels = $payload->getNormalizedTestLabel()[[200,400]];
+        $images = $payload->getNormalizedTestImg()[[0,7]];
+        $labels = $payload->getNormalizedTestLabel()[[0,7]];
         $predicts = $payload->getModel()->predict($images);
 
         $this->showResulPlot(
@@ -111,8 +111,8 @@ class ModelEvaluator implements StageInterface
             $payload->getConfigClassNames()
         );
 
-        $images = $payload->getNormalizedTestImg()[[0, 7]];
-        $labels = $payload->getNormalizedTestLabel()[[0, 7]];
+        $images = $payload->getNormalizedTestImg()[[200,400]];
+        $labels = $payload->getNormalizedTestLabel()[[200,400]];
         $predicts = $payload->getModel()->predict($images);
         $this->evaluate($predicts, $labels);
 
