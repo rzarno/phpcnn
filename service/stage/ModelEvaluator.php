@@ -111,6 +111,9 @@ class ModelEvaluator implements StageInterface
             $payload->getConfigClassNames()
         );
 
+        $images = $payload->getNormalizedTestImg()[[0, 7]];
+        $labels = $payload->getNormalizedTestLabel()[[0, 7]];
+        $predicts = $payload->getModel()->predict($images);
         $this->evaluate($predicts, $labels);
 
         return $payload;
