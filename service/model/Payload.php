@@ -28,6 +28,8 @@ class Payload
         private readonly int $configBatchSize,
         private readonly int $configImgWidth,
         private readonly int $configImgHeight,
+        private readonly int $cropFromTop,
+        private readonly int $imputeIterations,
         private readonly int $configNumImgLayers,
         private readonly string $configModelFilePath,
         private readonly array $configClassNames,
@@ -70,6 +72,16 @@ class Payload
     public function getConfigImgHeight(): int
     {
         return $this->configImgHeight;
+    }
+
+    public function getCropFromTop(): int
+    {
+        return $this->cropFromTop;
+    }
+
+    public function getImputeIterations(): int
+    {
+        return $this->imputeIterations;
     }
 
     public function getConfigNumImgLayers(): int
