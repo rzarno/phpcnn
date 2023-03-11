@@ -25,8 +25,7 @@ class ModelTraining implements StageInterface
         NDArray $test_img,
         NDArray $test_label,
         int $batch_size,
-        int $epochs,
-        string $modelFilePath
+        int $epochs
     ) {
         $train_dataset = $this->neuralNetworks->data->ImageDataGenerator($train_img,
             tests:$train_label,
@@ -55,6 +54,9 @@ class ModelTraining implements StageInterface
      */
     public function __invoke($payload)
     {
+        if ($payload->isConfigUseExistingModel()) {
+            return $payload;
+        }
         echo "training model ...\n";
         $this->trainModel(
             $payload->getModel(),
@@ -63,8 +65,7 @@ class ModelTraining implements StageInterface
             $payload->getNormalizedTestImg(),
             $payload->getNormalizedTestLabel(),
             $payload->getConfigBatchSize(),
-            $payload->getConfigNumEpochs(),
-            $payload->getConfigModelFilePath()
+            $payload->getConfigNumEpochs()
         );
 
         return $payload;

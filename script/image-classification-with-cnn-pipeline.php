@@ -40,7 +40,8 @@ $payload = new Payload(
     $configImgHeight = 40,
     $configNumImgLayers = 3,
     $configModelFilePath = __DIR__."/../model/image-classification-with-cnn-{$configModelVersion}.model",
-    $configClassNames = [1, 2, 3]
+    $configClassNames = [1, 2, 3],
+    $configUseExistingModel = false
 );
 
 $pipeline = (new Pipeline(new FingersCrossedProcessor()))
@@ -56,8 +57,3 @@ $pipeline = (new Pipeline(new FingersCrossedProcessor()))
 
 $pipeline->process($payload);
 
-if(file_exists($payload->getConfigModelFilePath())) {
-    echo "loading model ...\n";
-    $model = $neuralNetworks->models()->loadModel($payload->getConfigModelFilePath());
-    $model->summary();
-}

@@ -30,7 +30,8 @@ class Payload
         private readonly int $configImgHeight,
         private readonly int $configNumImgLayers,
         private readonly string $configModelFilePath,
-        private readonly array $configClassNames
+        private readonly array $configClassNames,
+        private readonly bool $configUseExistingModel
     ) {
         $this->configInputShape = [$this->configImgWidth, $this->configImgHeight, $this->configNumImgLayers];
     }
@@ -89,6 +90,11 @@ class Payload
     public function getConfigClassNames(): array
     {
         return $this->configClassNames;
+    }
+
+    public function isConfigUseExistingModel(): bool
+    {
+        return $this->configUseExistingModel;
     }
 
     public function getSequenceImg(): array

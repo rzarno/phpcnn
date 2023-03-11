@@ -128,9 +128,15 @@ class ModelCNNArchitectureFactory implements StageInterface
      */
     public function __invoke($payload)
     {
-        echo "building model...\n";
+        if ($payload->isConfigUseExistingModel()) {
+            echo "loading model ...\n";
+            $model = $this->neuralNetworks->models()->loadModel($payload->getConfigModelFilePath());
+            $model->summary();
+        } else {
+            echo "building model...\n";
 //    $model = $this->createRinbowCNN($payload->getConfigInputShape());
-        $model = $this->createNvidiaCNNDave2($payload->getConfigInputShape());
+            $model = $this->createNvidiaCNNDave2($payload->getConfigInputShape());
+        }
         $payload->setModel($model);
 
         return $payload;
