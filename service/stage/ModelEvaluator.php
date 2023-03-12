@@ -21,7 +21,8 @@ class ModelEvaluator implements StageInterface
         $images,
         $inputShape,
         $labels,
-        $classNames
+        $classNames,
+        $numClasses
     ) {
         $plt = new Plot(null, $this->matrixOperator);
         $plt->setConfig([
@@ -33,7 +34,7 @@ class ModelEvaluator implements StageInterface
             $axes[$i*2]->setFrame(false);
             $label = $labels[$i];
             $axes[$i*2]->setTitle($classNames[$label]."($label)");
-            $axes[$i*2+1]->bar($this->matrixOperator->arange(10),$predict);
+            $axes[$i*2+1]->bar($this->matrixOperator->arange($numClasses),$predict);
         }
 
         $this->plt->show();
@@ -108,7 +109,8 @@ class ModelEvaluator implements StageInterface
             $images,
             $payload->getConfigInputShape(),
             $labels,
-            $payload->getConfigClassNames()
+            $payload->getConfigClassNames(),
+            count($payload->getConfigClassNames())
         );
 
         $images = $payload->getNormalizedTestImg()[[200,400]];
