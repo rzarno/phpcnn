@@ -78,8 +78,8 @@ class DataImputer implements StageInterface
             $payload->getImputeIterations()
         );
         $payload->setImportedData(null)
-            ->setSequenceImg($sequenceImg)
-            ->setSequenceLabel($sequenceLabel);
+            ->setDataImg($sequenceImg)
+            ->setDataLabel($sequenceLabel);
         return $payload;
     }
 }

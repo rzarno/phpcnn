@@ -9,8 +9,8 @@ use Rindow\NeuralNetworks\Model\Sequential;
 class Payload
 {
     private ?array $importedData;
-    private array $sequenceImg;
-    private array $sequenceLabel;
+    private array $dataImg;
+    private array $dataLabel;
     private array $configInputShape;
     private ?NDArrayPhp $trainImg;
     private ?NDArrayPhp $testImg;
@@ -28,8 +28,8 @@ class Payload
         private readonly int $configBatchSize,
         private readonly int $configImgWidth,
         private readonly int $configImgHeight,
-        private readonly int $cropFromTop,
-        private readonly int $imputeIterations,
+        private readonly int $cropFromTop = 0,
+        private readonly int $imputeIterations = 0,
         private readonly int $configNumImgLayers,
         private readonly string $configModelFilePath,
         private readonly array $configClassNames,
@@ -109,25 +109,25 @@ class Payload
         return $this->configUseExistingModel;
     }
 
-    public function getSequenceImg(): array
+    public function getDataImg(): array
     {
-        return $this->sequenceImg;
+        return $this->dataImg;
     }
 
-    public function setSequenceImg(array $sequenceImg): self
+    public function setDataImg(array $dataImg): self
     {
-        $this->sequenceImg = $sequenceImg;
+        $this->dataImg = $dataImg;
         return $this;
     }
 
-    public function getSequenceLabel(): array
+    public function getDataLabel(): array
     {
-        return $this->sequenceLabel;
+        return $this->dataLabel;
     }
 
-    public function setSequenceLabel(array $sequenceLabel): self
+    public function setDataLabel(array $dataLabel): self
     {
-        $this->sequenceLabel = $sequenceLabel;
+        $this->dataLabel = $dataLabel;
         return $this;
     }
 

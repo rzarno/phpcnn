@@ -2,42 +2,27 @@
 
 namespace service\stage;
 
-use DirectoryIterator;
+use League\Pipeline\StageInterface;
 use service\model\Payload;
 
-class CaptchaImageDataProvider
+class CaptchaImageDataProvider implements StageInterface
 {
     function importData(): array
     {
         echo "importing data\n";
         $parentPath = '../image/captcha';
         $images = [];
-        foreach (new DirectoryIterator($parentPath) as $fileInfo) {
-            if (!$fileInfo->isDir()) {
-                continue;
-            }
 
-            foreach (new DirectoryIterator($parentPath . '/' . $fileInfo->getFilename()) as $file) {
-                if ($file->isDot()) {
-                    continue;
-                }
-                if (strpos($file->getFilename(), 'sequence') !== false) {
-                    if (!is_file($file->getPathname())) {
-                        continue;
-                    }
-                    if (!$currentSequence = json_decode(file_get_contents($file->getPathname()), true)) {
-                        continue;
-                    }
-                    foreach ($currentSequence['sequence'] as $step) {
-                        if (! $action = $step['action']) {
-                            continue;
-                        }
-                        $photoPath = str_replace('./sequences', '../image/sequence', $step['photo']);
-                        $images[$photoPath] = $action;
-                    }
-                }
+        $list = file_get_contents($parentPath . '/' . 'captcha_data.json');
+        $listDecoded = json_decode($list, true);
+
+        foreach ($listDecoded as $single) {
+            $images[$single['file_name']] = $single['text'];
+            if (count($images) >= 3000) {
+                break;
             }
         }
+
         return $images;
     }
 

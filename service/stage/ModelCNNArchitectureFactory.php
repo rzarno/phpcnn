@@ -13,14 +13,13 @@ class ModelCNNArchitectureFactory implements StageInterface
         private readonly NeuralNetworks $neuralNetworks
     ) {}
 
-    function rinbowCNN($inputShape): Sequential
+    function rinbowCNN(array $inputShape, int $numClasses): Sequential
     {
         $nn = $this->neuralNetworks;
         $model = $nn->models()->Sequential([
             $nn->layers()->Conv2D(
                 $filters=64,
                 $kernel_size=5,
-                strides:[2,2],
                 input_shape:$inputShape,
                 kernel_initializer:'he_normal'),
             $nn->layers()->BatchNormalization(),
@@ -28,13 +27,11 @@ class ModelCNNArchitectureFactory implements StageInterface
             $nn->layers()->Conv2D(
                 $filters=64,
                 $kernel_size=5,
-                strides:[2,2],
                 kernel_initializer:'he_normal'),
             $nn->layers()->MaxPooling2D(),
             $nn->layers()->Conv2D(
                 $filters=128,
                 $kernel_size=5,
-                strides:[2,2],
                 kernel_initializer:'he_normal'),
             $nn->layers()->BatchNormalization(),
             $nn->layers()->Activation('relu'),
@@ -53,7 +50,7 @@ class ModelCNNArchitectureFactory implements StageInterface
                 kernel_initializer:'he_normal'),
             $nn->layers()->BatchNormalization(),
             $nn->layers()->Activation('relu'),
-            $nn->layers()->Dense($units=10,
+            $nn->layers()->Dense($units=$numClasses,
                 activation:'softmax'),
         ]);
 
@@ -65,7 +62,7 @@ class ModelCNNArchitectureFactory implements StageInterface
         return $model;
     }
 
-    function createNvidiaCNNDave2($inputShape): Sequential
+    function createNvidiaCNNDave2(array $inputShape, int $numClasses): Sequential
     {
         $nn = $this->neuralNetworks;
         $model = $nn->models()->Sequential([
@@ -110,7 +107,7 @@ class ModelCNNArchitectureFactory implements StageInterface
             $nn->layers()->Dropout(0.2),
             $nn->layers()->Dense($units=100, activation:'relu'),
             $nn->layers()->Dense($units=50, activation:'relu'),
-            $nn->layers()->Dense($units=10,
+            $nn->layers()->Dense($units=$numClasses,
                 activation:'softmax'),
         ]);
 
@@ -134,8 +131,8 @@ class ModelCNNArchitectureFactory implements StageInterface
             $model->summary();
         } else {
             echo "building model...\n";
-//    $model = $this->createRinbowCNN($payload->getConfigInputShape());
-            $model = $this->createNvidiaCNNDave2($payload->getConfigInputShape());
+            $model = $this->rinbowCNN($payload->getConfigInputShape(), count($payload->getConfigClassNames()));
+//            $model = $this->createNvidiaCNNDave2($payload->getConfigInputShape(), count($payload->getConfigClassNames());
         }
         $payload->setModel($model);
 

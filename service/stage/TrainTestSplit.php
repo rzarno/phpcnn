@@ -9,18 +9,24 @@ use service\model\Payload;
 
 class TrainTestSplit implements StageInterface
 {
-    public function trainTestSplit(array $sequenceImg, array $sequenceLabel, int $imgWidth, int $imgHeight, int $numLayers): array
+    public function trainTestSplit(array $sequenceImg, array $sequenceLabel, int $imgWidth, int $imgHeight, int $numLayers, float $trainPart = 0.8): array
     {
-        $trainImg = array_slice($sequenceImg, 0, 4500);
-        $testImg = array_slice($sequenceImg, 4500);
+        $count = count($sequenceImg);
+        $split = (int) ($trainPart * $count);
 
-        $trainLabel = array_slice($sequenceLabel, 0, 4500);
-        $testLabel = array_slice($sequenceLabel, 4500);
+        $trainImg = array_slice($sequenceImg, 0, $split);
+        $testImg = array_slice($sequenceImg, $split);
 
-        $trainImgNDArray = new NDArrayPhp($trainImg, NDArray::int16, [4500, $numLayers, $imgWidth, $imgHeight]);
-        $trainLabelNDArray = new NDArrayPhp($trainLabel, NDArray::int8, [4500]);
-        $testImgNDArray = new NDArrayPhp($testImg, NDArray::int16, [1004, $numLayers, $imgWidth, $imgHeight]);
-        $testLabelNDArray = new NDArrayPhp($testLabel, NDArray::int8, [1004]);
+        $trainLabel = array_slice($sequenceLabel, 0, $split);
+        $testLabel = array_slice($sequenceLabel,  $split);
+
+        $trainImgCount = count($trainImg);
+        $testImgCount = count($testImg);
+
+        $trainImgNDArray = new NDArrayPhp($trainImg, NDArray::int16, [$trainImgCount, $numLayers, $imgWidth, $imgHeight]);
+        $trainLabelNDArray = new NDArrayPhp($trainLabel, NDArray::int8, [$trainImgCount]);
+        $testImgNDArray = new NDArrayPhp($testImg, NDArray::int16, [$testImgCount, $numLayers, $imgWidth, $imgHeight]);
+        $testLabelNDArray = new NDArrayPhp($testLabel, NDArray::int8, [$testImgCount]);
         return [$trainImgNDArray, $testImgNDArray, $trainLabelNDArray, $testLabelNDArray];
     }
 
@@ -32,8 +38,8 @@ class TrainTestSplit implements StageInterface
     {
         echo "split to train and test set\n";
         [$trainImg, $testImg, $trainLabel, $testLabel] = $this->trainTestSplit(
-            $payload->getSequenceImg(),
-            $payload->getSequenceLabel(),
+            $payload->getDataImg(),
+            $payload->getDataLabel(),
             $payload->getConfigImgWidth(),
             $payload->getConfigImgHeight(),
             $payload->getConfigNumImgLayers()

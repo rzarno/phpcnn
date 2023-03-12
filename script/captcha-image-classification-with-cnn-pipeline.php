@@ -7,12 +7,11 @@ use Rindow\Math\Matrix\MatrixOperator;
 use Rindow\Math\Plot\Plot;
 use Rindow\NeuralNetworks\Builder\NeuralNetworks;
 use service\ImageTransform;
-use service\LabelEncoder;
 use service\model\Payload;
+use service\stage\CaptchaCharEncoder;
+use service\stage\CaptchaImageCharExtractor;
 use service\stage\CaptchaImageDataProvider;
 use service\stage\DataAnalyzer;
-use service\stage\DataImputer;
-use service\stage\DriveImageDataProvider;
 use service\stage\ImagePreprocesor;
 use service\stage\ModelCNNArchitectureFactory;
 use service\stage\ModelEvaluator;
@@ -24,7 +23,7 @@ $matrixOperator = new MatrixOperator();
 $plot = new Plot();
 $dataProvider = new CaptchaImageDataProvider();
 $dataAnalyzer = new DataAnalyzer();
-$dataImputer = new DataImputer(new ImageTransform(), new LabelEncoder());
+$charImageExtractor = new CaptchaImageCharExtractor(new ImageTransform(), new CaptchaCharEncoder());
 $neuralNetworks = new NeuralNetworks($matrixOperator);
 $cnnModelFactory = new ModelCNNArchitectureFactory($neuralNetworks);
 $modelTrain = new ModelTraining($plot, $matrixOperator, $neuralNetworks);
@@ -37,13 +36,12 @@ $payload = new Payload(
     $configModelVersion = '1.0',
     $configEpochs = 10,
     $configBatchSize = 64,
-    $configImgWidth = 102,
-    $configImgHeight = 40,
-    $cropFromTop = 40,
-    $imputeIterations = 10,
+    $configImgWidth = 40,
+    $configImgHeight = 50,
+    $cropFromTop = 0,
+    $imputeIterations = 0,
     $configNumImgLayers = 3,
     $configModelFilePath = __DIR__."/../model/char-classification-with-cnn-{$configModelVersion}.model",
-
     $configClassNames = ['6', '2', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'W', 'X', 'Y', 'Z'],
     $configUseExistingModel = false
 );
@@ -51,7 +49,7 @@ $payload = new Payload(
 $pipeline = (new Pipeline(new FingersCrossedProcessor()))
     ->pipe($dataProvider)
     ->pipe($dataAnalyzer)
-    ->pipe($dataImputer)
+    ->pipe($charImageExtractor)
     ->pipe($trainTestSplit)
     ->pipe($imagePreprocessor)
     ->pipe($cnnModelFactory)
