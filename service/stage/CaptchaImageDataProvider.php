@@ -18,7 +18,7 @@ class CaptchaImageDataProvider implements StageInterface
 
         foreach ($listDecoded as $single) {
             $images[$single['file_name']] = $single['text'];
-            if (count($images) >= 3000) {
+            if (count($images) >= 6000) {
                 break;
             }
         }

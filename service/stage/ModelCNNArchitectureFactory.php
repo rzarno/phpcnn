@@ -131,8 +131,8 @@ class ModelCNNArchitectureFactory implements StageInterface
             $model->summary();
         } else {
             echo "building model...\n";
-            $model = $this->rinbowCNN($payload->getConfigInputShape(), count($payload->getConfigClassNames()));
-//            $model = $this->createNvidiaCNNDave2($payload->getConfigInputShape(), count($payload->getConfigClassNames());
+//            $model = $this->rinbowCNN($payload->getConfigInputShape(), count($payload->getConfigClassNames()));
+            $model = $this->createNvidiaCNNDave2($payload->getConfigInputShape(), count($payload->getConfigClassNames()));
         }
         $payload->setModel($model);
 

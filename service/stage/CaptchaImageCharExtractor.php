@@ -30,7 +30,7 @@ class CaptchaImageCharExtractor implements StageInterface
                 $im1c = $im2->clone();
                 $im1c->cropImage($width, $height, $i * $width, 0);
                 $charsImg[] = $this->imageTransform->exportRGBArray($im1c);
-                $charsLabel[] = $this->captchaCharEncoder->encode($chars[$i-1]);
+                $charsLabel[] = $this->captchaCharEncoder->encode($chars[$i]);
             }
         }
         return [$charsImg, $charsLabel];
