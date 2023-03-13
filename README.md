@@ -41,6 +41,10 @@ To train and test model run:
 `php script/self-driving-car-image-classification-with-cnn-pipeline`
 
 ----------------------------------------------------------------------------------------
+
+
+
+
 ## II captcha image recognition
 
 The goal for trained model is to recognize 6 characters from captcha images like below.
@@ -63,7 +67,8 @@ Captcha can contain any of 28 characters below. Letters are skewed, transformed 
 9. Evaluate model
 
 ### Results
-Model achieves oved 80% accuracy.
+Model achieves over 80% accuracy.
+
 <img src="./gallery/captcha_model_evaluation.png" width="430"/>
 
 Prediction is correct for all 28 classes. Some of characters are likely to be taken as other similar characters.
