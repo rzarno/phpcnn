@@ -39,6 +39,7 @@ To train and test model run:
 
 `composer install`
 
+inside dir /script run:
 `php script/self-driving-car-image-classification-with-cnn-pipeline`
 
 ----------------------------------------------------------------------------------------
@@ -81,4 +82,5 @@ To train and test model run:
 
 `composer install`
 
-`php script/captcha-image-classification-with-cnn-pipeline.php`
+inside dir /script run:
+`php captcha-image-classification-with-cnn-pipeline.php`
