@@ -38,6 +38,7 @@ main program is based on chain of responsibility design pattern implemented usin
 To train and test model run:
 
 `composer install`
+
 `php script/self-driving-car-image-classification-with-cnn-pipeline`
 
 ----------------------------------------------------------------------------------------
@@ -79,4 +80,5 @@ Prediction is correct for all 28 classes. Some of characters are likely to be ta
 To train and test model run:
 
 `composer install`
+
 `php script/captcha-image-classification-with-cnn-pipeline.php`
