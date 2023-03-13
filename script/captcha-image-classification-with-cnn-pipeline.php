@@ -34,7 +34,7 @@ $modelExport = new ModelExport();
 
 $payload = new Payload(
     $configModelVersion = '1.0',
-    $configEpochs = 10,
+    $configEpochs = 20,
     $configBatchSize = 64,
     $configImgWidth = 40,
     $configImgHeight = 50,

@@ -45,7 +45,6 @@ class ModelTraining implements StageInterface
         $this->plt->plot($this->matrixOperator->array($history['loss']),null,null,'loss');
         $this->plt->plot($this->matrixOperator->array($history['val_loss']),null,null,'val_loss');
         $this->plt->legend();
-        $this->plt->title('Lane driving action classification');
     }
 
     /**
