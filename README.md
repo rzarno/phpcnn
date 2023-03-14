@@ -5,6 +5,19 @@ I self-driving vehicle
 II captcha image recognition
 
 ## I self-driving vehicle
+
+### Setup
+
+To train and test model run:
+
+`composer install`
+
+inside dir /script run:
+
+`php script/self-driving-car-image-classification-with-cnn-pipeline`
+
+### About
+
 The goal for a trained model is to lead self-driving vehicle to choose proper action (go forward, turn left, turn right) based on image from front camera.
 Car has to follow track inside created lane.
 
@@ -37,6 +50,13 @@ main program is based on chain of responsibility design pattern implemented usin
 9. Evaluate model
 
 
+----------------------------------------------------------------------------------------
+
+
+
+
+## II captcha image recognition
+
 ### Setup
 
 To train and test model run:
@@ -45,14 +65,9 @@ To train and test model run:
 
 inside dir /script run:
 
-`php script/self-driving-car-image-classification-with-cnn-pipeline`
+`php captcha-image-classification-with-cnn-pipeline.php`
 
-----------------------------------------------------------------------------------------
-
-
-
-
-## II captcha image recognition
+### About
 
 The goal for trained model is to recognize 6 characters from captcha images like below.
 
@@ -85,13 +100,3 @@ Model trained with 42000 images and 20 epochs achieves 87% accuracy.
 Prediction has good accuracy for all 28 classes.
 
 <img src="./gallery/captcha_prediction_histogram.png" width="430"/>
- 
-### Setup
-
-To train and test model run:
-
-`composer install`
-
-inside dir /script run:
-
-`php captcha-image-classification-with-cnn-pipeline.php`
