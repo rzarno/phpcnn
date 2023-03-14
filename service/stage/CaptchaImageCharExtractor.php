@@ -4,6 +4,7 @@ namespace service\stage;
 
 use Imagick;
 use League\Pipeline\StageInterface;
+use service\CaptchaCharEncoder;
 use service\ImageTransform;
 use service\model\Payload;
 

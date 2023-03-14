@@ -9,12 +9,10 @@ use service\model\Payload;
 
 class ModelEvaluator implements StageInterface
 {
-
     public function __construct(
         private readonly Plot $plt,
         private readonly MatrixOperator $matrixOperator
-    ){
-    }
+    ){}
 
     public function showResulPlot(
         $predicts,

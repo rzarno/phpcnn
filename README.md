@@ -21,6 +21,9 @@ model implementation and training was handled thanks to Rindow Neural Networks
 
 https://github.com/rindow/rindow-neuralnetworks
 
+data distribution
+<img src="./gallery/self_driving_action_distribution.png" width="430"/>
+
 main program is based on chain of responsibility design pattern implemented using league/pipeline and containing stages:
 1. Import data
 2. Analyze dataset
@@ -57,6 +60,9 @@ The goal for trained model is to recognize 6 characters from captcha images like
 
 Captcha can contain any of 28 characters below. Letters are skewed, transformed and rotated.
 ['6', '2', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'W', 'V', 'X', 'Y', 'Z']
+
+data distribution
+<img src="./gallery/captcha_data_distribution.png" width="430"/>
 
 ### Pipeline
 1. Import data

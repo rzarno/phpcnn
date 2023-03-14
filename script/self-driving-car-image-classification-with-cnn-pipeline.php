@@ -22,7 +22,7 @@ use service\stage\TrainTestSplit;
 $matrixOperator = new MatrixOperator();
 $plot = new Plot();
 $dataProvider = new DriveImageDataProvider();
-$dataAnalyzer = new DataAnalyzer();
+$dataAnalyzer = new DataAnalyzer($plot, $matrixOperator);
 $dataImputer = new DataImputer(new ImageTransform(), new LabelEncoder());
 $neuralNetworks = new NeuralNetworks($matrixOperator);
 $cnnModelFactory = new ModelCNNArchitectureFactory($neuralNetworks);
@@ -42,14 +42,14 @@ $payload = new Payload(
     $imputeIterations = 10,
     $configNumImgLayers = 3,
     $configModelFilePath = __DIR__."/../model/image-classification-with-cnn-{$configModelVersion}.model",
-    $configClassNames = [1, 2, 3],
+    $configClassNames = [1, 2, 3, 4],
     $configUseExistingModel = false
 );
 
 $pipeline = (new Pipeline(new FingersCrossedProcessor()))
     ->pipe($dataProvider)
-    ->pipe($dataAnalyzer)
     ->pipe($dataImputer)
+    ->pipe($dataAnalyzer)
     ->pipe($trainTestSplit)
     ->pipe($imagePreprocessor)
     ->pipe($cnnModelFactory)

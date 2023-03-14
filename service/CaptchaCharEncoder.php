@@ -1,6 +1,6 @@
 <?php
 
-namespace service\stage;
+namespace service;
 
 class CaptchaCharEncoder
 {

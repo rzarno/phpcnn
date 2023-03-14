@@ -6,9 +6,9 @@ use League\Pipeline\Pipeline;
 use Rindow\Math\Matrix\MatrixOperator;
 use Rindow\Math\Plot\Plot;
 use Rindow\NeuralNetworks\Builder\NeuralNetworks;
+use service\CaptchaCharEncoder;
 use service\ImageTransform;
 use service\model\Payload;
-use service\stage\CaptchaCharEncoder;
 use service\stage\CaptchaImageCharExtractor;
 use service\stage\CaptchaImageDataProvider;
 use service\stage\DataAnalyzer;
@@ -22,7 +22,7 @@ use service\stage\TrainTestSplit;
 $matrixOperator = new MatrixOperator();
 $plot = new Plot();
 $dataProvider = new CaptchaImageDataProvider();
-$dataAnalyzer = new DataAnalyzer();
+$dataAnalyzer = new DataAnalyzer($plot, $matrixOperator);
 $charImageExtractor = new CaptchaImageCharExtractor(new ImageTransform(), new CaptchaCharEncoder());
 $neuralNetworks = new NeuralNetworks($matrixOperator);
 $cnnModelFactory = new ModelCNNArchitectureFactory($neuralNetworks);
@@ -48,8 +48,8 @@ $payload = new Payload(
 
 $pipeline = (new Pipeline(new FingersCrossedProcessor()))
     ->pipe($dataProvider)
-    ->pipe($dataAnalyzer)
     ->pipe($charImageExtractor)
+    ->pipe($dataAnalyzer)
     ->pipe($trainTestSplit)
     ->pipe($imagePreprocessor)
     ->pipe($cnnModelFactory)
