@@ -83,6 +83,7 @@ Model trained with 42000 images and 20 epochs achieves 87% accuracy.
 <img src="./gallery/captcha_model_evaluation.png" width="430"/>
 
 Prediction has good accuracy for all 28 classes.
+
 <img src="./gallery/captcha_prediction_histogram.png" width="430"/>
  
 ### Setup
