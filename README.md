@@ -70,11 +70,11 @@ Captcha can contain any of 28 characters below. Letters are skewed, transformed 
 9. Evaluate model
 
 ### Results
-Model achieves over 80% accuracy.
+Model trained with 42000 images and 20 epochs achieves 87% accuracy.
 
 <img src="./gallery/captcha_model_evaluation.png" width="430"/>
 
-Prediction is correct for all 28 classes. Some of characters are likely to be taken as other similar characters.
+Prediction has good accuracy for all 28 classes.
 <img src="./gallery/captcha_prediction_histogram.png" width="430"/>
  
 ### Setup
