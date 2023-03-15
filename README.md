@@ -49,6 +49,16 @@ main program is based on chain of responsibility design pattern implemented usin
 8. Export model
 9. Evaluate model
 
+### Results
+Model trained with 42000 images and 20 epochs achieves 72% accuracy.
+
+Results for specific classes:
+correct predictions 1: 73/102 72%
+correct predictions 2: 37/57  65%
+correct predictions 3: 34/42  81%
+
+<img src="./gallery/captcha_model_evaluation.png" width="430"/>
+
 
 ----------------------------------------------------------------------------------------
 
