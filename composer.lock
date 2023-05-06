@@ -4,8 +4,114 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d5eb7f25664aa787c047f2b723e7a8c3",
+    "content-hash": "8af20904e94fd5fd54987e9fcd517f70",
     "packages": [
+        {
+            "name": "adambrett/shell-wrapper",
+            "version": "0.8",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/adambrett/php-shell-wrapper.git",
+                "reference": "0ca9c254a547313d4990d11d8aca8da3fb647e6e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/adambrett/php-shell-wrapper/zipball/0ca9c254a547313d4990d11d8aca8da3fb647e6e",
+                "reference": "0ca9c254a547313d4990d11d8aca8da3fb647e6e",
+                "shasum": ""
+            },
+            "require-dev": {
+                "covex-nn/phpcb": "*@dev",
+                "fzaninotto/faker": "*@dev",
+                "mockery/mockery": "*@dev",
+                "pdepend/pdepend": "*@dev",
+                "phploc/phploc": "*@dev",
+                "phpmd/phpmd": "*@dev",
+                "phpunit/phpunit": "*@dev",
+                "sebastian/phpcpd": "*@dev",
+                "squizlabs/php_codesniffer": "*@dev"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "AdamBrett\\ShellWrapper\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BDS-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Adam Brett",
+                    "email": "adam@adambrett.co.uk"
+                }
+            ],
+            "description": "An object oriented wrapper for shell commands",
+            "support": {
+                "issues": "https://github.com/adambrett/php-shell-wrapper/issues",
+                "source": "https://github.com/adambrett/php-shell-wrapper/tree/master"
+            },
+            "time": "2017-02-16T16:57:56+00:00"
+        },
+        {
+            "name": "cvuorinen/raspicam-php",
+            "version": "v1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/cvuorinen/raspicam-php.git",
+                "reference": "6d8a77170ba622d7f6dde14ab3e9a48b008d33b8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/cvuorinen/raspicam-php/zipball/6d8a77170ba622d7f6dde14ab3e9a48b008d33b8",
+                "reference": "6d8a77170ba622d7f6dde14ab3e9a48b008d33b8",
+                "shasum": ""
+            },
+            "require": {
+                "adambrett/shell-wrapper": "~0.5",
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "cvuorinen/phpdoc-markdown-public": "^0.1.0",
+                "phpunit/phpunit": "^4.8"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Cvuorinen\\Raspicam\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Carl Vuorinen",
+                    "email": "carl.vuorinen@gmail.com"
+                }
+            ],
+            "description": "Control Raspberry Pi camera module with PHP",
+            "homepage": "https://github.com/cvuorinen/raspicam-php",
+            "keywords": [
+                "camera",
+                "hardware",
+                "photo",
+                "raspberry",
+                "raspberry pi",
+                "raspistill",
+                "raspistillyuv",
+                "raspivid",
+                "timelapse",
+                "video"
+            ],
+            "support": {
+                "issues": "https://github.com/cvuorinen/raspicam-php/issues",
+                "source": "https://github.com/cvuorinen/raspicam-php/tree/master"
+            },
+            "time": "2017-10-01T15:33:14+00:00"
+        },
         {
             "name": "interop-phpobjects/polite-math",
             "version": "1.0.4",
@@ -101,6 +207,56 @@
                 "source": "https://github.com/thephpleague/pipeline/tree/master"
             },
             "time": "2018-06-05T21:06:51+00:00"
+        },
+        {
+            "name": "piphp/gpio",
+            "version": "0.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/PiPHP/GPIO.git",
+                "reference": "9288aa1b56c7ca85b182bbfb5225313ca7354093"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/PiPHP/GPIO/zipball/9288aa1b56c7ca85b182bbfb5225313ca7354093",
+                "reference": "9288aa1b56c7ca85b182bbfb5225313ca7354093",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.3||^8.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^9.3"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "PiPHP\\GPIO\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Andrew Carter",
+                    "email": "andrewcarter1992@gmail.com"
+                }
+            ],
+            "description": "A library for accessing the GPIO pins on a Raspberry Pi",
+            "keywords": [
+                "GPIO",
+                "pi",
+                "pin",
+                "pins",
+                "raspberry"
+            ],
+            "support": {
+                "issues": "https://github.com/PiPHP/GPIO/issues",
+                "source": "https://github.com/PiPHP/GPIO/tree/master"
+            },
+            "time": "2020-08-24T13:50:12+00:00"
         },
         {
             "name": "rindow/rindow-math-matrix",

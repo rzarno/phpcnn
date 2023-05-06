@@ -1,35 +1,26 @@
 <?php
 require __DIR__.'/../vendor/autoload.php';
 
-use League\Pipeline\FingersCrossedProcessor;
-use League\Pipeline\Pipeline;
+use Interop\Polite\Math\Matrix\NDArray;
 use Rindow\Math\Matrix\MatrixOperator;
-use Rindow\Math\Plot\Plot;
+use Rindow\Math\Matrix\NDArrayPhp;
 use Rindow\NeuralNetworks\Builder\NeuralNetworks;
 use service\ImageTransform;
 use service\LabelEncoder;
 use service\model\Payload;
-use service\stage\DataAnalyzer;
+use service\raspberry\Camera;
+use service\raspberry\Motor;
 use service\stage\DataImputer;
 use service\stage\DriveImageDataProvider;
 use service\stage\ImagePreprocesor;
-use service\stage\ModelCNNArchitectureFactory;
-use service\stage\ModelEvaluator;
-use service\stage\ModelExport;
-use service\stage\ModelTraining;
-use service\stage\TrainTestSplit;
 
 $matrixOperator = new MatrixOperator();
-$plot = new Plot();
 $dataProvider = new DriveImageDataProvider();
-$dataAnalyzer = new DataAnalyzer($plot, $matrixOperator);
 $dataImputer = new DataImputer(new ImageTransform(), new LabelEncoder());
 $neuralNetworks = new NeuralNetworks($matrixOperator);
-$cnnModelFactory = new ModelCNNArchitectureFactory($neuralNetworks);
-$modelTrain = new ModelTraining($plot, $matrixOperator, $neuralNetworks);
-$resultsEvaluator = new ModelEvaluator($plot, $matrixOperator);
-$trainTestSplit = new TrainTestSplit();
 $imagePreprocessor = new ImagePreprocesor($matrixOperator);
+$camera = new Camera();
+$motor = new Motor();
 
 $payload = new Payload(
     $configModelVersion = '1.0',
@@ -44,16 +35,43 @@ $payload = new Payload(
     $configClassNames = [1, 2, 3, 4],
     $configUseExistingModel = false
 );
+$path = __DIR__ . '/photo1.jpg';
+$model = $neuralNetworks->models()->loadModel('../model/image-classification-with-cnn-1.0.model');
 
-$pipeline = (new Pipeline(new FingersCrossedProcessor()))
-    ->pipe($dataProvider)
-    ->pipe($dataImputer)
-    ->pipe($trainTestSplit)
-    ->pipe($imagePreprocessor);
+while (1) {
+    $camera->takePhoto(__DIR__ . '/photo1.jpg');
 
-$pipeline->process($payload);
+    $images = [$path => 1];
+    $data = $dataImputer->imputeData(
+        [$path => 1],
+        $payload->getConfigImgWidth(),
+        $payload->getConfigImgHeight(),
+        $payload->getCropFromTop(),
+        $payload->getImputeIterations()
+    );
+    $imgNDArray = new NDArrayPhp(
+        $images,
+        NDArray::int16,
+        [count($images), $payload->getConfigNumImgLayers(), $payload->getConfigImgWidth(), $payload->getConfigImgHeight()]
+    );
+    $normalizedImages = $imagePreprocessor->flattenAndNormalizeImage($imgNDArray, $payload->getConfigInputShape());
 
 
-$neuralNetworks->models()->loadModel('../model/image-classification-with-cnn-1.0.model');
+    $predictions = $model->predict($normalizedImages);
 
-$model->predict($images);
+    var_dump($predictions);
+
+    switch ($predictions[0]) {
+        case 1:
+            $motor->forward();
+            break;
+        case 2:
+            $motor->left();
+            break;
+        case 3:
+            $motor->right();
+            break;
+        default:
+            error_log("command not recognized\n");
+    }
+}

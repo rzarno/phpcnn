@@ -3,7 +3,9 @@
         "rindow/rindow-neuralnetworks": "^2.0",
         "rindow/rindow-math-plot": "^1.0",
         "league/pipeline": "^1.0",
-        "ext-imagick": "*"
+        "ext-imagick": "*",
+        "piphp/gpio": "^0.4.0",
+        "cvuorinen/raspicam-php": "^1.0"
     },
     "autoload": {
         "psr-0": {
