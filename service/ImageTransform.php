@@ -24,10 +24,6 @@ class ImageTransform
         } else {
             $im->brightnessContrastImage(5, 20);
         }
-//    if (rand(1,2) == 2) {
-//        $im->cropImage(97, 30, 5, 10);
-//        $im->scaleImage(102, 30);
-//    }
         if (rand(1,2) == 2) {
             $im->flopImage();
         }

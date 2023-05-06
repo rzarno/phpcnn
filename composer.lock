@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "814231e52cf10632dc4828b5368b4c63",
+    "content-hash": "d5eb7f25664aa787c047f2b723e7a8c3",
     "packages": [
         {
             "name": "interop-phpobjects/polite-math",
@@ -254,7 +254,9 @@
     "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
-    "platform": [],
+    "platform": {
+        "ext-imagick": "*"
+    },
     "platform-dev": [],
     "plugin-api-version": "2.3.0"
 }

@@ -13,13 +13,11 @@ class TrainTestSplit implements StageInterface
     {
         $count = count($sequenceImg);
         $split = (int) ($trainPart * $count);
-
         $trainImg = array_slice($sequenceImg, 0, $split);
         $testImg = array_slice($sequenceImg, $split);
 
         $trainLabel = array_slice($sequenceLabel, 0, $split);
         $testLabel = array_slice($sequenceLabel,  $split);
-
         $trainImgCount = count($trainImg);
         $testImgCount = count($testImg);
 
