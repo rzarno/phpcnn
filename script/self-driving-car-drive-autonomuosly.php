@@ -22,6 +22,8 @@ $imagePreprocessor = new ImagePreprocesor($matrixOperator);
 $camera = new Camera();
 $motor = new Motor();
 
+$testMode = 1; //disable for raspberry
+
 $payload = new Payload(
     $configModelVersion = '1.0',
     $configEpochs = 20,
@@ -29,39 +31,47 @@ $payload = new Payload(
     $configImgWidth = 102,
     $configImgHeight = 40,
     $cropFromTop = 40,
-    $imputeIterations = 10,
+    $imputeIterations = 1,
     $configNumImgLayers = 3,
     $configModelFilePath = __DIR__."/../model/image-classification-with-cnn-{$configModelVersion}.model",
     $configClassNames = [1, 2, 3, 4],
     $configUseExistingModel = false
 );
-$path = __DIR__ . '/photo1.jpg';
+$path = __DIR__ . '/sample.jpg';
 $model = $neuralNetworks->models()->loadModel('../model/image-classification-with-cnn-1.0.model');
 
 while (1) {
-    $camera->takePhoto(__DIR__ . '/photo1.jpg');
 
+    if (! $testMode) {
+        $camera->takePhoto($path);
+    }
     $images = [$path => 1];
     $data = $dataImputer->imputeData(
-        [$path => 1],
+        $images,
         $payload->getConfigImgWidth(),
         $payload->getConfigImgHeight(),
         $payload->getCropFromTop(),
         $payload->getImputeIterations()
     );
     $imgNDArray = new NDArrayPhp(
-        $images,
+        $data[0],
         NDArray::int16,
-        [count($images), $payload->getConfigNumImgLayers(), $payload->getConfigImgWidth(), $payload->getConfigImgHeight()]
+        [count($data[0]), $payload->getConfigNumImgLayers(), $payload->getConfigImgWidth(), $payload->getConfigImgHeight()]
     );
     $normalizedImages = $imagePreprocessor->flattenAndNormalizeImage($imgNDArray, $payload->getConfigInputShape());
 
 
     $predictions = $model->predict($normalizedImages);
+    $predictionsArray = $predictions->toArray();
 
-    var_dump($predictions);
+    var_dump($predictionsArray);
+    $max = array_keys($predictionsArray, max($predictionsArray));
 
-    switch ($predictions[0]) {
+    if ($testMode) {
+        exit(0);
+    }
+
+    switch (reset($max)) {
         case 1:
             $motor->forward();
             break;

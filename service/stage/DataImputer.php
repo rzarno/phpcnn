@@ -35,8 +35,10 @@ class DataImputer implements StageInterface
             $currentProcessedImg = [];
             $currentProcessedLabel = [];
             for ($i = 0; $i < $iterations; $i++) {
-                $imNew = $this->imageTransform->modifyImageRandomly($im);
-                $pixels = $this->imageTransform->exportRGBArray($imNew);
+                if ($iterations !== 1) {
+                    $im = $this->imageTransform->modifyImageRandomly($im);
+                }
+                $pixels = $this->imageTransform->exportRGBArray($im);
                 $currentProcessedImg[] = $pixels;
                 $currentProcessedLabel[] = $this->labelEncoder->encodeAction($action);;
             }
