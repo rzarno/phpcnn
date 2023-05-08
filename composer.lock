@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8af20904e94fd5fd54987e9fcd517f70",
+    "content-hash": "e9a524ff696def3de8c8e0fbda290669",
     "packages": [
         {
             "name": "adambrett/shell-wrapper",
@@ -411,7 +411,9 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "ext-imagick": "*"
+        "ext-imagick": "*",
+        "ext-gd": "*",
+        "ext-pdo_sqlite": "*"
     },
     "platform-dev": [],
     "plugin-api-version": "2.3.0"

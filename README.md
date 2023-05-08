@@ -1,8 +1,17 @@
 # Training Convolutional Neural Network in PHP
 
 This project is about training convolutional neural network model (CNN) for use cases:
-I self-driving vehicle
-II captcha image recognition
+- I self-driving vehicle
+- II captcha image recognition
+
+## Setup
+You can run project locally or using docker.
+### Local
+1. Install PHP 8.1 with dependencies: `php8.1-imagick php8.1-gd php8.1-sqlite3`
+2. Install [composer](https://getcomposer.org/download/)
+3. Install [Rindow OpenBLAS PHP extension](https://github.com/rindow/rindow-openblas)
+4. Install project dependencies: `composer install`
+5. Set `memory_limit = -1` in php.ini
 
 ## I self-driving vehicle
 
@@ -10,11 +19,16 @@ II captcha image recognition
 
 To train and test model run:
 
-`composer install`
+```
+bin/cli self-driving-car-image-classification-with-cnn-pipeline
+```
 
-inside dir /script run:
+or using docker:
 
-`php script/self-driving-car-image-classification-with-cnn-pipeline`
+```
+docker run --rm rzarno/phpcnn \
+  self-driving-car-image-classification-with-cnn-pipeline
+```
 
 ### About
 
@@ -71,11 +85,16 @@ correct predictions 3: 34/42  81%
 
 To train and test model run:
 
-`composer install`
+```
+bin/cli captcha-image-classification-with-cnn-pipeline
+```
 
-inside dir /script run:
+or using docker:
 
-`php captcha-image-classification-with-cnn-pipeline.php`
+```
+docker run --rm rzarno/phpcnn \
+  captcha-image-classification-with-cnn-pipeline
+```
 
 ### About
 

@@ -4,8 +4,10 @@
         "rindow/rindow-math-plot": "^1.0",
         "league/pipeline": "^1.0",
         "ext-imagick": "*",
+        "ext-gd": "*",
         "piphp/gpio": "^0.4.0",
-        "cvuorinen/raspicam-php": "^1.0"
+        "cvuorinen/raspicam-php": "^1.0",
+        "ext-pdo_sqlite": "*"
     },
     "autoload": {
         "psr-0": {
