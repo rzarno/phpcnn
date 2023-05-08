@@ -21,8 +21,7 @@ use service\stage\ModelTraining;
 use service\stage\TrainTestSplit;
 
 $matrixOperator = new MatrixOperator();
-$renderer = new GDDriver(true, null, null, false, true, true);
-$plot = new Plot(null, $matrixOperator, $renderer);
+$plot = new Plot(matrixOperator: $matrixOperator, renderer: new GDDriver( skipRunViewer: true));
 $dataProvider = new CaptchaImageDataProvider();
 $dataAnalyzer = new DataAnalyzer($plot, $matrixOperator);
 $charImageExtractor = new CaptchaImageCharExtractor(new ImageTransform(), new CaptchaCharEncoder());
