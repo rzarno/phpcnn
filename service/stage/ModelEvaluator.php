@@ -22,10 +22,9 @@ class ModelEvaluator implements StageInterface
         $classNames,
         $numClasses
     ) {
-        $plt = new Plot(null, $this->matrixOperator);
-        $plt->setConfig([
+        $this->plt->setConfig([
             'frame.xTickLength'=>0,'title.position'=>'down','title.margin'=>0,]);
-        [$fig,$axes] = $this->plt->subplots(4,4);
+        [,$axes] = $this->plt->subplots(4,4);
         foreach ($predicts as $i => $predict) {
             $axes[$i*2]->imshow($images[$i]->reshape($inputShape),
                 null,null,null,$origin='upper');

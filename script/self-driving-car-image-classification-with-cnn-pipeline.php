@@ -5,6 +5,7 @@ use League\Pipeline\FingersCrossedProcessor;
 use League\Pipeline\Pipeline;
 use Rindow\Math\Matrix\MatrixOperator;
 use Rindow\Math\Plot\Plot;
+use Rindow\Math\Plot\Renderer\GDDriver;
 use Rindow\NeuralNetworks\Builder\NeuralNetworks;
 use service\ImageTransform;
 use service\LabelEncoder;
@@ -20,7 +21,7 @@ use service\stage\ModelTraining;
 use service\stage\TrainTestSplit;
 
 $matrixOperator = new MatrixOperator();
-$plot = new Plot();
+$plot = new Plot(matrixOperator: $matrixOperator, renderer: new GDDriver( skipRunViewer: true));
 $dataProvider = new DriveImageDataProvider();
 $dataAnalyzer = new DataAnalyzer($plot, $matrixOperator);
 $dataImputer = new DataImputer(new ImageTransform(), new LabelEncoder());
