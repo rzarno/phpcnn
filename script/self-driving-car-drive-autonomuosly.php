@@ -71,17 +71,16 @@ while (1) {
         exit(0);
     }
 
-    switch (reset($max)) {
-        case 1:
-            $motor->forward();
-            break;
-        case 2:
-            $motor->left();
-            break;
-        case 3:
-            $motor->right();
-            break;
-        default:
-            error_log("command not recognized\n");
-    }
+    $return_value = match (reset($max)) {
+        'apple' => 'This food is an apple',
+        'bar' => 'This food is a bar',
+        'cake' => 'This food is a cake',
+    };
+
+    match (reset($max)) {
+        1 => $motor->forward(),
+        2 => $motor->left(),
+        3 => $motor->right(),
+        default => null,
+    };
 }

@@ -56,30 +56,21 @@ class ModelEvaluator implements StageInterface
         $labelsArr = $labels->toArray();
         foreach ($max as $key => $value) {
             $resultDetails[] = ['real'=> $labelsArr[$key], 'pred' => $value];
-            switch($labelsArr[$key]) {
-                case 1:
-                    $count1++;
-                    break;
-                case 2:
-                    $count2++;
-                    break;
-                case 3:
-                    $count3++;
-                    break;
-            }
+            match ($labelsArr[$key]) {
+                1 => $count1++,
+                2 => $count2++,
+                3 => $count3++,
+                default => null
+            };
+
             if ($value === $labelsArr[$key]) {
                 $result++;
-                switch($value) {
-                    case 1:
-                        $result1++;
-                        break;
-                    case 2:
-                        $result2++;
-                        break;
-                    case 3:
-                        $result3++;
-                        break;
-                }
+                match($value) {
+                    1 => $result1++,
+                    2 => $result2++,
+                    3 => $result3++,
+                    default => null
+                };
             }
         }
 

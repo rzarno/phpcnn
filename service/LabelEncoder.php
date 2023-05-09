@@ -6,18 +6,11 @@ class LabelEncoder
 {
     function encodeAction(string $actionBefore): ?int
     {
-        $action = null;
-        switch ($actionBefore) {
-            case 'forward':
-                $action = 1;
-                break;
-            case 'left':
-                $action = 2;
-                break;
-            case 'right':
-                $action = 3;
-                break;
-        }
-        return $action;
+        return match ($actionBefore) {
+            'forward' => 1,
+            'left' => 2,
+            'right' => 3,
+            default => null
+        };
     }
 }
