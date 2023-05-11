@@ -71,12 +71,6 @@ while (1) {
         exit(0);
     }
 
-    $return_value = match (reset($max)) {
-        'apple' => 'This food is an apple',
-        'bar' => 'This food is a bar',
-        'cake' => 'This food is a cake',
-    };
-
     match (reset($max)) {
         1 => $motor->forward(),
         2 => $motor->left(),
