@@ -23,7 +23,7 @@ class DriveApi
             CURLOPT_HTTPHEADER => $headers
         ];
 
-        $ch = curl_init('https://dev.companyhouse.de/phpcnn/script/self-driving/api-predict.php');
+        $ch = curl_init('https://www.companyhouse.de/phpcnn/script/self-driving/api-predict.php');
         curl_setopt_array($ch, $options);
 
         $content  = curl_exec($ch);

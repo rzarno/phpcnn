@@ -22,7 +22,6 @@ class DataImputer implements StageInterface
         int $cropFromTop,
         int $iterations
     ) {
-        echo "impute data\n";
         $sequenceImg = [];
         $sequenceLabel = [];
         foreach ($images as $photoPath => $action) {
