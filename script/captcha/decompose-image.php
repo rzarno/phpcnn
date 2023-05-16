@@ -1,14 +1,14 @@
 <?php
-require __DIR__.'/../vendor/autoload.php';
+require __DIR__ . '/../../vendor/autoload.php';
 
 use Imagick;
 
 $photos = [
-1 => '../image/captcha/resolved_captcha_13609752.jpg',
-2 => '../image/captcha/resolved_captcha_13609750.jpg',
-3 => '../image/captcha/resolved_captcha_13609821.jpg',
-4 => '../image/captcha/resolved_captcha_13609822.jpg',
-5 => '../image/captcha/resolved_captcha_13609844.jpg'
+    1 => __DIR__ . '/../../image/captcha/resolved_captcha_13609752.jpg',
+    2 => __DIR__ . '/../../image/captcha/resolved_captcha_13609750.jpg',
+    3 => __DIR__ . '/../../image/captcha/resolved_captcha_13609821.jpg',
+    4 => __DIR__ . '/../../image/captcha/resolved_captcha_13609822.jpg',
+    5 => __DIR__ . '/../../image/captcha/resolved_captcha_13609844.jpg'
 ];
 //w/h 224
 foreach ($photos as $key => $photo) {

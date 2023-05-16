@@ -4,11 +4,12 @@
         "rindow/rindow-neuralnetworks": "^2.0",
         "rindow/rindow-math-plot": "^1.0",
         "league/pipeline": "^1.0",
-        "ext-imagick": "*",
-        "ext-gd": "*",
         "piphp/gpio": "^0.4.0",
         "cvuorinen/raspicam-php": "^1.0",
-        "ext-pdo_sqlite": "*"
+        "ext-imagick": "*",
+        "ext-gd": "*",
+        "ext-pdo_sqlite": "*",
+        "ext-curl": "*"
     },
     "autoload": {
         "psr-0": {
