@@ -18,7 +18,7 @@ while (1) {
     }
 
     $response = $api->request($path);
-    echo $response;
+    echo $response . "\n";
 
     match ((int) $response) {
         1 => $motor->forward(),

@@ -4,6 +4,8 @@ namespace service\api;
 
 class DriveApi
 {
+    private const API_URL = 'https://www.companyhouse.de/phpcnn/script/self-driving/api-predict.php';
+
     function request(string $imgPath) {
         $headers = [
             'Content-Type: application/json',
@@ -23,7 +25,7 @@ class DriveApi
             CURLOPT_HTTPHEADER => $headers
         ];
 
-        $ch = curl_init('https://www.companyhouse.de/phpcnn/script/self-driving/api-predict.php');
+        $ch = curl_init(self::API_URL);
         curl_setopt_array($ch, $options);
 
         $content  = curl_exec($ch);
