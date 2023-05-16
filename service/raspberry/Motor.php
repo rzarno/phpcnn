@@ -15,7 +15,7 @@ class Motor
     private const IN3 = 6;
     private const IN4 = 5;
 
-    private const DEFAULT_SLEEPMSEC = 500;
+    private const DEFAULT_SLEEPMSEC = 500000;
 
     private GPIO $gpio;
 
