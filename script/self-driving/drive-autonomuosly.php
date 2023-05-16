@@ -10,7 +10,7 @@ $motor = new Motor();
 $api = new DriveApi();
 
 $path = __DIR__ . '/sample.jpg';
-$debug = 1;
+$debug = 0;
 
 while (1) {
     if (! $debug) {

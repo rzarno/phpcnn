@@ -15,7 +15,7 @@ class Motor
     private const IN3 = 6;
     private const IN4 = 5;
 
-    private const DEFAULT_SLEEPSEC = 1.0;
+    private const DEFAULT_SLEEPSEC = 0.5;
 
     private GPIO $gpio;
 
@@ -32,6 +32,7 @@ class Motor
         $this->gpio->getOutputPin(self::IN3)->setValue(PinInterface::VALUE_LOW);
         $this->gpio->getOutputPin(self::IN4)->setValue(PinInterface::VALUE_HIGH);
         sleep(self::DEFAULT_SLEEPSEC);
+        $this->stop();
     }
 
     public function left()
@@ -42,8 +43,8 @@ class Motor
         $this->gpio->getOutputPin(self::ENB)->setValue(PinInterface::VALUE_LOW);
         $this->gpio->getOutputPin(self::IN3)->setValue(PinInterface::VALUE_LOW);
         $this->gpio->getOutputPin(self::IN4)->setValue(PinInterface::VALUE_LOW);
-
         sleep(self::DEFAULT_SLEEPSEC);
+        $this->stop();
     }
 
     public function right()
@@ -55,6 +56,7 @@ class Motor
         $this->gpio->getOutputPin(self::IN1)->setValue(PinInterface::VALUE_LOW);
         $this->gpio->getOutputPin(self::IN2)->setValue(PinInterface::VALUE_LOW);
         sleep(self::DEFAULT_SLEEPSEC);
+        $this->stop();
     }
 
     public function stop()
