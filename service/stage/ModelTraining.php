@@ -36,10 +36,12 @@ class ModelTraining implements StageInterface
             vertical_flip:true,
             horizontal_flip:true
         );
+        $start = time();
         $history = $model->fit($train_dataset,null,
             epochs:$epochs,
             validation_data:[$test_img,$test_label]);
-
+        $end = time();
+        echo "processing took " . ($end - $start) / 60;
         $this->plt->plot($this->matrixOperator->array($history['accuracy']),null,null,'accuracy');
         $this->plt->plot($this->matrixOperator->array($history['val_accuracy']),null,null,'val_accuracy');
         $this->plt->plot($this->matrixOperator->array($history['loss']),null,null,'loss');
