@@ -11,7 +11,7 @@ class DriveImageDataProvider implements StageInterface
     function importData(): array
     {
         echo "importing data\n";
-        $parentPath = '../image/drive-sequence';
+        $parentPath = '../../image/drive-sequence';
         $images = [];
         foreach (new DirectoryIterator($parentPath) as $fileInfo) {
             if (!$fileInfo->isDir()) {
@@ -33,7 +33,7 @@ class DriveImageDataProvider implements StageInterface
                         if (! $action = $step['action']) {
                             continue;
                         }
-                        $photoPath = str_replace('./sequences', '../image/drive-sequence', $step['photo']);
+                        $photoPath = str_replace('./sequences', '../../image/drive-sequence', $step['photo']);
                         $images[$photoPath] = $action;
                     }
                 }
