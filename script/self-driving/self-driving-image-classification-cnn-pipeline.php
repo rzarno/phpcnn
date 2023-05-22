@@ -42,7 +42,7 @@ $payload = new Payload(
     $cropFromTop = 40,
     $imputeIterations = 10,
     $configNumImgLayers = 3,
-    $configModelFilePath = __DIR__."/../model/image-classification-with-cnn-{$configModelVersion}.model",
+    $configModelFilePath = __DIR__."/../../model/image-classification-with-cnn-{$configModelVersion}.model",
     $configClassNames = [1, 2, 3, 4],
     $configUseExistingModel = false
 );
