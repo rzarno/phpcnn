@@ -10,7 +10,7 @@ class CaptchaImageDataProvider implements StageInterface
     function importData(): array
     {
         echo "importing data\n";
-        $parentPath = '../image/captcha';
+        $parentPath = '../../image/captcha';
         $images = [];
 
         $list = file_get_contents($parentPath . '/' . 'captcha_data.json');

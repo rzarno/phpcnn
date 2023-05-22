@@ -28,7 +28,7 @@ class CaptchaImageCharExtractor implements StageInterface
             $im1->writeImage("sample.jpg");
             $im2 = new Imagick("sample.jpg");
             for ($i = 0; $i < 6; $i++) {
-                $im1c = $im2->clone();
+                $im1c = clone $im2;
                 $im1c->cropImage($width, $height, $i * $width, 0);
                 $charsImg[] = $this->imageTransform->exportRGBArray($im1c);
                 $charsLabel[] = $this->captchaCharEncoder->encode($chars[$i]);
