@@ -28,12 +28,12 @@ class Payload
         private readonly int $configBatchSize,
         private readonly int $configImgWidth,
         private readonly int $configImgHeight,
-        private readonly int $cropFromTop = 0,
-        private readonly int $imputeIterations = 0,
         private readonly int $configNumImgLayers,
         private readonly string $configModelFilePath,
         private readonly array $configClassNames,
-        private readonly bool $configUseExistingModel
+        private readonly bool $configUseExistingModel,
+        private readonly int $cropFromTop = 0,
+        private readonly int $imputeIterations = 0
     ) {
         $this->configInputShape = [$this->configImgWidth, $this->configImgHeight, $this->configNumImgLayers];
     }

@@ -40,12 +40,12 @@ $payload = new Payload(
     $configBatchSize = 64,
     $configImgWidth = 102,
     $configImgHeight = 40,
-    $cropFromTop = 40,
-    $imputeIterations = 10,
     $configNumImgLayers = 3,
     $configModelFilePath = __DIR__."/../../model/image-classification-with-cnn-{$configModelVersion}.model",
     $configClassNames = [1, 2, 3, 4],
-    $configUseExistingModel = false
+    $configUseExistingModel = false,
+    $cropFromTop = 40,
+    $imputeIterations = 10
 );
 
 $pipeline = (new Pipeline(new FingersCrossedProcessor()))

@@ -40,12 +40,12 @@ $payload = new Payload(
     $configBatchSize = 64,
     $configImgWidth = 40,
     $configImgHeight = 50,
-    $cropFromTop = 0,
-    $imputeIterations = 0,
     $configNumImgLayers = 3,
     $configModelFilePath = __DIR__."/../../model/char-classification-with-cnn-{$configModelVersion}.model",
     $configClassNames = ['6', '2', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'W', 'V', 'X', 'Y', 'Z'],
-    $configUseExistingModel = false
+    $configUseExistingModel = false,
+    $cropFromTop = 0,
+    $imputeIterations = 0
 );
 
 $pipeline = (new Pipeline(new FingersCrossedProcessor()))
