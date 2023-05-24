@@ -27,7 +27,7 @@ or using docker:
 
 ```
 docker run --rm rzarno/phpcnn \
-  self-driving-car-image-classification-with-cnn-pipeline
+  self-driving-image-classification-cnn-pipeline
 ```
 
 ### About
@@ -93,7 +93,7 @@ or using docker:
 
 ```
 docker run --rm rzarno/phpcnn \
-  captcha-image-classification-with-cnn-pipeline
+  captcha-image-classification-cnn-pipeline
 ```
 
 ### About
