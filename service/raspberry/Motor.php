@@ -19,7 +19,8 @@ class Motor
 
     private GPIO $gpio;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->gpio = new GPIO();
     }
 

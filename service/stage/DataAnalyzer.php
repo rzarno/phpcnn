@@ -12,7 +12,8 @@ class DataAnalyzer implements StageInterface
     public function __construct(
         private readonly Plot $plt,
         private readonly MatrixOperator $matrixOperator
-    ){}
+    ) {
+    }
 
     public function analyzeData(array $labels)
     {

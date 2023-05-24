@@ -11,9 +11,10 @@ class ModelCNNArchitectureFactory implements StageInterface
 {
     public function __construct(
         private readonly NeuralNetworks $neuralNetworks
-    ) {}
+    ) {
+    }
 
-    function rinbowCNN(array $inputShape, int $numClasses): Sequential
+    public function rinbowCNN(array $inputShape, int $numClasses): Sequential
     {
         $nn = $this->neuralNetworks;
         $model = $nn->models()->Sequential([
@@ -21,37 +22,46 @@ class ModelCNNArchitectureFactory implements StageInterface
                 $filters=64,
                 $kernel_size=5,
                 input_shape:$inputShape,
-                kernel_initializer:'he_normal'),
+                kernel_initializer:'he_normal'
+            ),
             $nn->layers()->BatchNormalization(),
             $nn->layers()->Activation('relu'),
             $nn->layers()->Conv2D(
                 $filters=64,
                 $kernel_size=5,
-                kernel_initializer:'he_normal'),
+                kernel_initializer:'he_normal'
+            ),
             $nn->layers()->MaxPooling2D(),
             $nn->layers()->Conv2D(
                 $filters=128,
                 $kernel_size=5,
-                kernel_initializer:'he_normal'),
+                kernel_initializer:'he_normal'
+            ),
             $nn->layers()->BatchNormalization(),
             $nn->layers()->Activation('relu'),
             $nn->layers()->Conv2D(
                 $filters=128,
                 $kernel_size=3,
-                kernel_initializer:'he_normal'),
+                kernel_initializer:'he_normal'
+            ),
             $nn->layers()->MaxPooling2D(),
             $nn->layers()->Conv2D(
                 $filters=256,
                 $kernel_size=3,
                 kernel_initializer:'he_normal',
-                activation:'relu'),
+                activation:'relu'
+            ),
             $nn->layers()->GlobalAveragePooling2D(),
-            $nn->layers()->Dense($units=512,
-                kernel_initializer:'he_normal'),
+            $nn->layers()->Dense(
+                $units=512,
+                kernel_initializer:'he_normal'
+            ),
             $nn->layers()->BatchNormalization(),
             $nn->layers()->Activation('relu'),
-            $nn->layers()->Dense($units=$numClasses,
-                activation:'softmax'),
+            $nn->layers()->Dense(
+                $units=$numClasses,
+                activation:'softmax'
+            ),
         ]);
 
         $model->compile(
@@ -62,7 +72,7 @@ class ModelCNNArchitectureFactory implements StageInterface
         return $model;
     }
 
-    function createNvidiaCNNDave2(array $inputShape, int $numClasses): Sequential
+    public function createNvidiaCNNDave2(array $inputShape, int $numClasses): Sequential
     {
         $nn = $this->neuralNetworks;
         $model = $nn->models()->Sequential([
@@ -70,42 +80,51 @@ class ModelCNNArchitectureFactory implements StageInterface
                 $filters=64,
                 $kernel_size=5,
                 input_shape:$inputShape,
-                kernel_initializer:'he_normal'),
+                kernel_initializer:'he_normal'
+            ),
             $nn->layers()->BatchNormalization(),
             $nn->layers()->Activation('relu'),
             $nn->layers()->Conv2D(
                 $filters=64,
                 $kernel_size=5,
-                kernel_initializer:'he_normal'),
+                kernel_initializer:'he_normal'
+            ),
             $nn->layers()->MaxPooling2D(),
             $nn->layers()->Conv2D(
                 $filters=128,
                 $kernel_size=5,
-                kernel_initializer:'he_normal'),
+                kernel_initializer:'he_normal'
+            ),
             $nn->layers()->BatchNormalization(),
             $nn->layers()->Activation('relu'),
             $nn->layers()->Conv2D(
                 $filters=128,
                 $kernel_size=3,
-                kernel_initializer:'he_normal'),
+                kernel_initializer:'he_normal'
+            ),
             $nn->layers()->MaxPooling2D(),
             $nn->layers()->Conv2D(
                 $filters=256,
                 $kernel_size=3,
                 kernel_initializer:'he_normal',
-                activation:'relu'),
+                activation:'relu'
+            ),
             $nn->layers()->GlobalAveragePooling2D(),
 
-            $nn->layers()->Dense($units=512,
-                kernel_initializer:'he_normal'),
+            $nn->layers()->Dense(
+                $units=512,
+                kernel_initializer:'he_normal'
+            ),
             $nn->layers()->BatchNormalization(),
             $nn->layers()->Activation('relu'),
             $nn->layers()->Flatten(),
             $nn->layers()->Dropout(0.2),
             $nn->layers()->Dense($units=100, activation:'relu'),
             $nn->layers()->Dense($units=50, activation:'relu'),
-            $nn->layers()->Dense($units=$numClasses,
-                activation:'softmax'),
+            $nn->layers()->Dense(
+                $units=$numClasses,
+                activation:'softmax'
+            ),
         ]);
 
         $model->compile(
@@ -128,7 +147,7 @@ class ModelCNNArchitectureFactory implements StageInterface
             $model->summary();
         } else {
             echo "building model...\n";
-//            $model = $this->rinbowCNN($payload->getConfigInputShape(), count($payload->getConfigClassNames()));
+            //            $model = $this->rinbowCNN($payload->getConfigInputShape(), count($payload->getConfigClassNames()));
             $model = $this->createNvidiaCNNDave2($payload->getConfigInputShape(), count($payload->getConfigClassNames()));
         }
         $payload->setModel($model);

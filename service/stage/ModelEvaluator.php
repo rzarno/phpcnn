@@ -1,4 +1,5 @@
 <?php
+
 namespace service\stage;
 
 use Interop\Polite\Math\Matrix\NDArray;
@@ -12,7 +13,8 @@ class ModelEvaluator implements StageInterface
     public function __construct(
         private readonly Plot $plt,
         private readonly MatrixOperator $matrixOperator
-    ){}
+    ) {
+    }
 
     public function showResulPlot(
         $predicts,
@@ -24,14 +26,19 @@ class ModelEvaluator implements StageInterface
     ) {
         $this->plt->setConfig([
             'frame.xTickLength'=>0,'title.position'=>'down','title.margin'=>0,]);
-        [,$axes] = $this->plt->subplots(4,4);
+        [,$axes] = $this->plt->subplots(4, 4);
         foreach ($predicts as $i => $predict) {
-            $axes[$i*2]->imshow($images[$i]->reshape($inputShape),
-                null,null,null,$origin='upper');
+            $axes[$i*2]->imshow(
+                $images[$i]->reshape($inputShape),
+                null,
+                null,
+                null,
+                $origin='upper'
+            );
             $axes[$i*2]->setFrame(false);
             $label = $labels[$i];
             $axes[$i*2]->setTitle($classNames[$label]."($label)");
-            $axes[$i*2+1]->bar($this->matrixOperator->arange($numClasses),$predict);
+            $axes[$i*2+1]->bar($this->matrixOperator->arange($numClasses), $predict);
         }
 
         $this->plt->show();

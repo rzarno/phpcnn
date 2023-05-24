@@ -7,7 +7,7 @@ use service\model\Payload;
 
 class CaptchaImageDataProvider implements StageInterface
 {
-    function importData(): array
+    public function importData(): array
     {
         echo "importing data\n";
         $parentPath = '../../image/captcha';

@@ -13,7 +13,8 @@ class DataImputer implements StageInterface
     public function __construct(
         private readonly ImageTransform $imageTransform,
         private readonly LabelEncoder $labelEncoder
-    ) {}
+    ) {
+    }
 
     public function imputeData(
         array $images,
@@ -39,7 +40,8 @@ class DataImputer implements StageInterface
                 }
                 $pixels = $this->imageTransform->exportRGBArray($im);
                 $currentProcessedImg[] = $pixels;
-                $currentProcessedLabel[] = $this->labelEncoder->encodeAction($action);;
+                $currentProcessedLabel[] = $this->labelEncoder->encodeAction($action);
+                ;
             }
             $sequenceImg = array_merge($sequenceImg, $currentProcessedImg);
             $sequenceLabel = array_merge($sequenceLabel, $currentProcessedLabel);

@@ -10,11 +10,11 @@ use service\model\Payload;
 
 class CaptchaImageCharExtractor implements StageInterface
 {
-
     public function __construct(
         private readonly ImageTransform $imageTransform,
         private readonly CaptchaCharEncoder $captchaCharEncoder
-    ) {}
+    ) {
+    }
 
     public function extract(array $images, int $width, int $height)
     {

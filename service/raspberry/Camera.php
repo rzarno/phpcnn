@@ -12,7 +12,7 @@ class Camera
         $this->camera = new Raspistill();
     }
 
-    function takePhoto(string $path)
+    public function takePhoto(string $path)
     {
         $this->camera->takePicture($path);
     }

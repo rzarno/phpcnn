@@ -6,7 +6,7 @@ use Imagick;
 
 class ImageTransform
 {
-    function exportRGBArray(Imagick $im): array
+    public function exportRGBArray(Imagick $im): array
     {
         $pixels = [
             $im->exportImagePixels(0, 0, $im->getImageWidth(), $im->getImageHeight(), "R", \Imagick::PIXEL_CHAR),
@@ -16,15 +16,15 @@ class ImageTransform
         return $pixels;
     }
 
-    function modifyImageRandomly(Imagick $im): Imagick
+    public function modifyImageRandomly(Imagick $im): Imagick
     {
         $im = clone $im;
-        if (rand(1,2) == 2) {
+        if (rand(1, 2) == 2) {
             $im->brightnessContrastImage(10, 10);
         } else {
             $im->brightnessContrastImage(5, 20);
         }
-        if (rand(1,2) == 2) {
+        if (rand(1, 2) == 2) {
             $im->flopImage();
         }
         return $im;

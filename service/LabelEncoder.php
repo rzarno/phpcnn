@@ -4,7 +4,7 @@ namespace service;
 
 class LabelEncoder
 {
-    function encodeAction(string $actionBefore): ?int
+    public function encodeAction(string $actionBefore): ?int
     {
         return match ($actionBefore) {
             'forward' => 1,

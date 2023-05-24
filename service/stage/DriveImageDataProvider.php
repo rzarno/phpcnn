@@ -8,7 +8,7 @@ use service\model\Payload;
 
 class DriveImageDataProvider implements StageInterface
 {
-    function importData(): array
+    public function importData(): array
     {
         echo "importing data\n";
         $parentPath = '../../image/drive-sequence';

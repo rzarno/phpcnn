@@ -6,7 +6,8 @@ class DriveApi
 {
     private const API_URL = 'https://www.companyhouse.de/phpcnn/script/self-driving/api-predict.php';
 
-    function request(string $imgPath) {
+    public function request(string $imgPath)
+    {
         $headers = [
             'Content-Type: application/json',
         ];

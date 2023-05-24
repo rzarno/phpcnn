@@ -1,4 +1,5 @@
 <?php
+
 require __DIR__ . '/../../vendor/autoload.php';
 
 use League\Pipeline\FingersCrossedProcessor;
@@ -21,7 +22,7 @@ use service\stage\ModelTraining;
 use service\stage\TrainTestSplit;
 
 $matrixOperator = new MatrixOperator();
-$plot = new Plot(matrixOperator: $matrixOperator, renderer: new GDDriver( skipRunViewer: true));
+$plot = new Plot(matrixOperator: $matrixOperator, renderer: new GDDriver(skipRunViewer: true));
 $dataProvider = new CaptchaImageDataProvider();
 $dataAnalyzer = new DataAnalyzer($plot, $matrixOperator);
 $charImageExtractor = new CaptchaImageCharExtractor(new ImageTransform(), new CaptchaCharEncoder());
@@ -59,4 +60,3 @@ $pipeline = (new Pipeline(new FingersCrossedProcessor()))
     ->pipe($resultsEvaluator);
 
 $pipeline->process($payload);
-

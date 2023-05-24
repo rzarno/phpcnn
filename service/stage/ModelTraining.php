@@ -16,9 +16,10 @@ class ModelTraining implements StageInterface
         private readonly Plot $plt,
         private readonly MatrixOperator $matrixOperator,
         private readonly NeuralNetworks $neuralNetworks
-    ) {}
+    ) {
+    }
 
-    function trainModel(
+    public function trainModel(
         Sequential $model,
         NDArray $train_img,
         NDArray $train_label,
@@ -27,7 +28,8 @@ class ModelTraining implements StageInterface
         int $batch_size,
         int $epochs
     ) {
-        $train_dataset = $this->neuralNetworks->data->ImageDataGenerator($train_img,
+        $train_dataset = $this->neuralNetworks->data->ImageDataGenerator(
+            $train_img,
             tests:$train_label,
             batch_size:$batch_size,
             shuffle:true,
@@ -37,15 +39,18 @@ class ModelTraining implements StageInterface
             horizontal_flip:true
         );
         $start = time();
-        $history = $model->fit($train_dataset,null,
+        $history = $model->fit(
+            $train_dataset,
+            null,
             epochs:$epochs,
-            validation_data:[$test_img,$test_label]);
+            validation_data:[$test_img,$test_label]
+        );
         $end = time();
         echo "processing took " . ($end - $start) / 60;
-        $this->plt->plot($this->matrixOperator->array($history['accuracy']),null,null,'accuracy');
-        $this->plt->plot($this->matrixOperator->array($history['val_accuracy']),null,null,'val_accuracy');
-        $this->plt->plot($this->matrixOperator->array($history['loss']),null,null,'loss');
-        $this->plt->plot($this->matrixOperator->array($history['val_loss']),null,null,'val_loss');
+        $this->plt->plot($this->matrixOperator->array($history['accuracy']), null, null, 'accuracy');
+        $this->plt->plot($this->matrixOperator->array($history['val_accuracy']), null, null, 'val_accuracy');
+        $this->plt->plot($this->matrixOperator->array($history['loss']), null, null, 'loss');
+        $this->plt->plot($this->matrixOperator->array($history['val_loss']), null, null, 'val_loss');
         $this->plt->legend();
     }
 
