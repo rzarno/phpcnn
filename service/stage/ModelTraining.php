@@ -21,29 +21,28 @@ class ModelTraining implements StageInterface
 
     public function trainModel(
         Sequential $model,
-        NDArray $train_img,
-        NDArray $train_label,
-        NDArray $test_img,
-        NDArray $test_label,
-        int $batch_size,
+        NDArray $trainImg,
+        NDArray $trainLabel,
+        NDArray $testImg,
+        NDArray $testLabel,
+        int $batchSize,
         int $epochs
     ) {
-        $train_dataset = $this->neuralNetworks->data->ImageDataGenerator(
-            $train_img,
-            tests:$train_label,
-            batch_size:$batch_size,
-            shuffle:true,
-            height_shift:2,
-            width_shift:2,
-            vertical_flip:true,
-            horizontal_flip:true
+        $trainDataset = $this->neuralNetworks->data->ImageDataGenerator(
+            $trainImg,
+            tests: $trainLabel,
+            batch_size: $batchSize,
+            shuffle: true,
+            height_shift: 2,
+            width_shift: 2,
+            vertical_flip: true,
+            horizontal_flip: true
         );
         $start = time();
         $history = $model->fit(
-            $train_dataset,
-            null,
-            epochs:$epochs,
-            validation_data:[$test_img,$test_label]
+            $trainDataset,
+            epochs: $epochs,
+            validation_data: [$testImg, $testLabel]
         );
         $end = time();
         echo "processing took " . ($end - $start) / 60;

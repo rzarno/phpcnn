@@ -20,7 +20,7 @@ You can run project locally or using docker.
 To train and test model run:
 
 ```
-bin/cli self-driving-car-image-classification-with-cnn-pipeline
+bin/cli self-driving-image-classification-cnn-pipeline
 ```
 
 or using docker:
@@ -86,7 +86,7 @@ correct predictions 3: 34/42  81%
 To train and test model run:
 
 ```
-bin/cli captcha-image-classification-with-cnn-pipeline
+bin/cli captcha-image-classification-cnn-pipeline
 ```
 
 or using docker:

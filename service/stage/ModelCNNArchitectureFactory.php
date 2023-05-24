@@ -19,54 +19,54 @@ class ModelCNNArchitectureFactory implements StageInterface
         $nn = $this->neuralNetworks;
         $model = $nn->models()->Sequential([
             $nn->layers()->Conv2D(
-                $filters=64,
-                $kernel_size=5,
-                input_shape:$inputShape,
-                kernel_initializer:'he_normal'
+                $filters = 64,
+                $kernel_size = 5,
+                input_shape: $inputShape,
+                kernel_initializer: 'he_normal'
             ),
             $nn->layers()->BatchNormalization(),
             $nn->layers()->Activation('relu'),
             $nn->layers()->Conv2D(
-                $filters=64,
-                $kernel_size=5,
-                kernel_initializer:'he_normal'
+                $filters = 64,
+                $kernel_size = 5,
+                kernel_initializer: 'he_normal'
             ),
             $nn->layers()->MaxPooling2D(),
             $nn->layers()->Conv2D(
-                $filters=128,
-                $kernel_size=5,
-                kernel_initializer:'he_normal'
+                $filters = 128,
+                $kernel_size = 5,
+                kernel_initializer: 'he_normal'
             ),
             $nn->layers()->BatchNormalization(),
             $nn->layers()->Activation('relu'),
             $nn->layers()->Conv2D(
-                $filters=128,
-                $kernel_size=3,
-                kernel_initializer:'he_normal'
+                $filters = 128,
+                $kernel_size = 3,
+                kernel_initializer: 'he_normal'
             ),
             $nn->layers()->MaxPooling2D(),
             $nn->layers()->Conv2D(
-                $filters=256,
-                $kernel_size=3,
-                kernel_initializer:'he_normal',
-                activation:'relu'
+                $filters = 256,
+                $kernel_size = 3,
+                kernel_initializer: 'he_normal',
+                activation: 'relu'
             ),
             $nn->layers()->GlobalAveragePooling2D(),
             $nn->layers()->Dense(
-                $units=512,
-                kernel_initializer:'he_normal'
+                $units = 512,
+                kernel_initializer: 'he_normal'
             ),
             $nn->layers()->BatchNormalization(),
             $nn->layers()->Activation('relu'),
             $nn->layers()->Dense(
-                $units=$numClasses,
-                activation:'softmax'
+                $units = $numClasses,
+                activation: 'softmax'
             ),
         ]);
 
         $model->compile(
-            loss:'sparse_categorical_crossentropy',
-            optimizer:'adam',
+            loss: 'sparse_categorical_crossentropy',
+            optimizer: 'adam',
         );
         $model->summary();
         return $model;
@@ -77,59 +77,59 @@ class ModelCNNArchitectureFactory implements StageInterface
         $nn = $this->neuralNetworks;
         $model = $nn->models()->Sequential([
             $nn->layers()->Conv2D(
-                $filters=64,
-                $kernel_size=5,
-                input_shape:$inputShape,
-                kernel_initializer:'he_normal'
+                $filters = 64,
+                $kernel_size = 5,
+                input_shape: $inputShape,
+                kernel_initializer: 'he_normal'
             ),
             $nn->layers()->BatchNormalization(),
             $nn->layers()->Activation('relu'),
             $nn->layers()->Conv2D(
-                $filters=64,
-                $kernel_size=5,
-                kernel_initializer:'he_normal'
+                $filters = 64,
+                $kernel_size = 5,
+                kernel_initializer: 'he_normal'
             ),
             $nn->layers()->MaxPooling2D(),
             $nn->layers()->Conv2D(
-                $filters=128,
-                $kernel_size=5,
-                kernel_initializer:'he_normal'
+                $filters = 128,
+                $kernel_size = 5,
+                kernel_initializer: 'he_normal'
             ),
             $nn->layers()->BatchNormalization(),
             $nn->layers()->Activation('relu'),
             $nn->layers()->Conv2D(
-                $filters=128,
-                $kernel_size=3,
-                kernel_initializer:'he_normal'
+                $filters = 128,
+                $kernel_size = 3,
+                kernel_initializer: 'he_normal'
             ),
             $nn->layers()->MaxPooling2D(),
             $nn->layers()->Conv2D(
-                $filters=256,
-                $kernel_size=3,
-                kernel_initializer:'he_normal',
-                activation:'relu'
+                $filters = 256,
+                $kernel_size = 3,
+                kernel_initializer: 'he_normal',
+                activation: 'relu'
             ),
             $nn->layers()->GlobalAveragePooling2D(),
 
             $nn->layers()->Dense(
                 $units=512,
-                kernel_initializer:'he_normal'
+                kernel_initializer: 'he_normal'
             ),
             $nn->layers()->BatchNormalization(),
             $nn->layers()->Activation('relu'),
             $nn->layers()->Flatten(),
             $nn->layers()->Dropout(0.2),
-            $nn->layers()->Dense($units=100, activation:'relu'),
-            $nn->layers()->Dense($units=50, activation:'relu'),
+            $nn->layers()->Dense($units = 100, activation: 'relu'),
+            $nn->layers()->Dense($units = 50, activation: 'relu'),
             $nn->layers()->Dense(
-                $units=$numClasses,
-                activation:'softmax'
+                $units = $numClasses,
+                activation: 'softmax'
             ),
         ]);
 
         $model->compile(
-            loss:'sparse_categorical_crossentropy',
-            optimizer:'adam',
+            loss: 'sparse_categorical_crossentropy',
+            optimizer: 'adam',
         );
         $model->summary();
         return $model;
@@ -147,7 +147,6 @@ class ModelCNNArchitectureFactory implements StageInterface
             $model->summary();
         } else {
             echo "building model...\n";
-            //            $model = $this->rinbowCNN($payload->getConfigInputShape(), count($payload->getConfigClassNames()));
             $model = $this->createNvidiaCNNDave2($payload->getConfigInputShape(), count($payload->getConfigClassNames()));
         }
         $payload->setModel($model);
